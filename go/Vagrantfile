@@ -4,7 +4,7 @@
 $script = <<SCRIPT
 # Update apt and get dependencies
 sudo apt-get update
-sudo apt-get install -y unzip curl wget vim
+sudo apt-get install -y zip unzip curl wget vim
 
 # Setup go
 GO_VERSION="1.7.1"
@@ -22,6 +22,7 @@ rm go*.tar.gz
 SRCROOT="/usr/local/go"
 SRCPATH="/home/vagrant/go"
 mkdir -p $SRCPATH
+sudo chown -R vagrant:vagrant $SRCPATH
 
 cat <<EOF >/tmp/gopath.sh
 export GOPATH="$SRCPATH"
@@ -33,6 +34,17 @@ sudo chmod 0755 /etc/profile.d/gopath.sh
 source /etc/profile.d/gopath.sh
 
 SCRIPT
+
+required_plugins = %w(vagrant-cachier)
+
+required_plugins.each do |plugin|
+  need_restart = false
+  unless Vagrant.has_plugin? plugin
+    system "vagrant plugin install #{plugin}"
+    need_restart = true
+  end
+  exec "vagrant #{ARGV.join(' ')}" if need_restart
+end
 
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
@@ -95,10 +107,16 @@ Vagrant.configure(2) do |config|
 
   config.vm.define vmName do |vmCfg|
       vmCfg.vm.hostname = vmName
+      #Adding Vagrant-cachier
+      if Vagrant.has_plugin?("vagrant-cachier")
+        vmCfg.cache.scope = :machine
+        vmCfg.cache.enable :apt
+        vmCfg.cache.enable :gem
+      end
   end
 
-  config.vm.provision "shell", inline: $script, privileged: false
   config.vm.synced_folder ".", "/home/vagrant/go/src/github.com/kmova/bootstrap/go/"
+  config.vm.provision "shell", inline: $script, privileged: false
 
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
