@@ -7,7 +7,7 @@ sudo apt-get update
 sudo apt-get install -y zip unzip curl wget vim
 
 # Setup go
-GO_VERSION="1.7.1"
+GO_VERSION="1.8"
 
 # Get the ARCH
 ARCH=`uname -m | sed 's|i686|386|' | sed 's|x86_64|amd64|'`
@@ -22,10 +22,12 @@ rm go*.tar.gz
 SRCROOT="/usr/local/go"
 SRCPATH="/home/vagrant/go"
 mkdir -p $SRCPATH
+mkdir -p $SRCPATH/bin
 sudo chown -R vagrant:vagrant $SRCPATH
 
 cat <<EOF >/tmp/gopath.sh
 export GOPATH="$SRCPATH"
+export GOBIN="$SRCPATH/bin"
 export GOROOT="$SRCROOT"
 export PATH="$SRCROOT/bin:$SRCPATH/bin:\$PATH"
 EOF
