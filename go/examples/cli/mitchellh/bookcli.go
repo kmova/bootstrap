@@ -8,13 +8,17 @@ import (
         "github.com/mitchellh/cli"
 )
 
-// Commands returns the mapping of Book CLI commands. The meta
-// parameter lets you set meta options for all commands.
+// Commands returns the mapping of Book CLI commands. 
+// Specifying a space in the key, will add the command as sub-command
 func Commands() map[string]cli.CommandFactory {
 
         return map[string]cli.CommandFactory{
-                "book": func() (cli.Command, error) {
-                        return &BookCommand{
+                "book add": func() (cli.Command, error) {
+                        return &BookAddCommand{
+                        }, nil
+                },
+                "book list": func() (cli.Command, error) {
+                        return &BookListCommand{
                         }, nil
                 },
         }
