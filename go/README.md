@@ -58,3 +58,10 @@ Hello, world.
 Hello, I am from your first go package!
 vagrant@go-dev:~/go/src/github.com/kmova$ 
 ```
+
+Customize git for code checkin
+
+```
+git config --global user.name "kmova"
+```
+
