@@ -63,5 +63,6 @@ Customize git for code checkin
 
 ```
 git config --global user.name "kmova"
+git config --global user.email "kiran.mova@cloudbyte.com"
 ```
 
