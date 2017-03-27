@@ -1,10 +1,7 @@
 package mitchellh
 
 import (
-        "bytes"
         "fmt"
-
-        "github.com/mitchellh/cli"
 )
 
 // BookCommand is a Command implementation for storing book information
@@ -12,7 +9,6 @@ type BookCommand struct {
         Name            string
         ReadTime        int
         Entry           bool
-        Ui              cli.Ui
 }
 
 func (c *BookCommand) Help() string {
@@ -20,13 +16,11 @@ func (c *BookCommand) Help() string {
 }
 
 func (c *BookCommand) Run(_ []string) int {
-        var outString bytes.Buffer
 
-        fmt.Fprintf(&outString, "Name: %s", c.Name)
-        fmt.Fprintf(&outString, "Reading Time in minutes: %s", c.ReadTime)
-        fmt.Fprintf(&outString, "Entry Level?: %s", c.Entry)
+        fmt.Println("Name: ", c.Name)
+        fmt.Println("Reading Time in minutes: ", c.ReadTime)
+        fmt.Println("Entry Level?: ", c.Entry)
 
-        c.Ui.Output(outString.String())
         return 0
 }
 

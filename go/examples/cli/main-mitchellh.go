@@ -11,7 +11,7 @@ import (
 func main() {
 	c := cli.NewCLI("app", "1.0.0")
 	c.Args = os.Args[1:]
-	c.Commands = clim.Commands( nil )
+	c.Commands = clim.Commands( )
 
 	exitStatus, err := c.Run()
 	if err != nil {

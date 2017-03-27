@@ -5,31 +5,16 @@
 package mitchellh
 
 import (
-        "os"
-
         "github.com/mitchellh/cli"
 )
 
 // Commands returns the mapping of Book CLI commands. The meta
 // parameter lets you set meta options for all commands.
-func Commands(metaPtr *command.Meta) map[string]cli.CommandFactory {
-        if metaPtr == nil {
-                metaPtr = new(command.Meta)
-        }
-
-        meta := *metaPtr
-        if meta.Ui == nil {
-                meta.Ui = &cli.BasicUi{
-                        Reader:      os.Stdin,
-                        Writer:      os.Stdout,
-                        ErrorWriter: os.Stderr,
-                }
-        }
+func Commands() map[string]cli.CommandFactory {
 
         return map[string]cli.CommandFactory{
                 "book": func() (cli.Command, error) {
                         return &BookCommand{
-                                M: meta,
                         }, nil
                 },
         }
