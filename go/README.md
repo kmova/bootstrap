@@ -23,7 +23,19 @@ Make sure $GOROOT and $GOBIN are also added to your $PATH.
 
 Verify go is installed by running *go version*
 
-## Running the Go examples from this repository
+
+## go get
+
+Let us say we want to run the hello world example from this repository. Go will automatically checkout the directory for you from Github (or any other respository) and compile the package. 
+```
+cd $GOPATH/src
+go get github.com/kmova/bootstrap/go/examples/hello
+hello
+```
+
+## go run 
+
+Use this mechanism when you want to run a specific go file from a respository. We sill run the same hello world program using go run. 
 
 ```
 cd $GOPATH/src
@@ -32,4 +44,5 @@ cd $GOPATH/src/github.com/kmova
 git clone https://github.com/kmova/bootstrap.git
 go run bootstrap/go/examples/hello/main.go
 ```
+
 
