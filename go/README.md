@@ -47,6 +47,15 @@ Let us say we want to run the unit tests for hello world example from this repos
 go test -bench=. github.com/kmova/bootstrap/go/examples/hello
 ```
 
+## go test (coverage analysis)
+
+Get the test coverage details per function 
+
+```
+go test -coverprofile=/tmp/hellocover.out github.com/kmova/bootstrap/go/examples/hello
+go tool cover -func=/tmp/hellocover.out
+```
+
 ## go run 
 
 Use this mechanism when you want to run a specific go file from a respository. We sill run the same hello world program using go run. 

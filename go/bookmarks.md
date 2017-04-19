@@ -3,6 +3,7 @@ Beginner:
 - [Book - An Introduction to Programming in Go](https://www.golang-book.com/books/intro)
 - [Go Unit Test Basics](https://jonathanmh.com/golang-unit-testing-for-absolute-beginners/)
 - [Go BenchMark Test Basics](https://dave.cheney.net/2013/06/30/how-to-write-benchmarks-in-go)
+- [Go Coverage Basics](https://blog.golang.org/cover)
 
 
 Intermediate:
