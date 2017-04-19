@@ -28,9 +28,23 @@ Verify go is installed by running *go version*
 
 Let us say we want to run the hello world example from this repository. Go will automatically checkout the directory for you from Github (or any other respository) and compile the package. 
 ```
-cd $GOPATH/src
 go get github.com/kmova/bootstrap/go/examples/hello
 hello
+```
+
+## go test (unit tests)
+
+Let us say we want to run the unit tests for hello world example from this repository. 
+```
+go test github.com/kmova/bootstrap/go/examples/hello
+```
+
+
+## go test (benchmark tests)
+
+Let us say we want to run the unit tests for hello world example from this repository. 
+```
+go test -bench=. github.com/kmova/bootstrap/go/examples/hello
 ```
 
 ## go run 
@@ -44,5 +58,4 @@ cd $GOPATH/src/github.com/kmova
 git clone https://github.com/kmova/bootstrap.git
 go run bootstrap/go/examples/hello/main.go
 ```
-
 
