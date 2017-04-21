@@ -23,6 +23,8 @@ SRCROOT="/usr/local/go"
 SRCPATH="/home/vagrant/go"
 mkdir -p $SRCPATH
 mkdir -p $SRCPATH/bin
+mkdir -p $SRCPATH/src
+mkdir -p $SRCPATH/pkg
 sudo chown -R vagrant:vagrant $SRCPATH
 
 cat <<EOF >/tmp/gopath.sh
