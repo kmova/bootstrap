@@ -15,13 +15,9 @@ limitations under the License.
 // Example package containing sample greetings.
 package greetings
 
-import (
-        "fmt"
-)
-
 // Introduce self.
-func SelfIntro() {
-	fmt.Println("Hello, I am from your first go package!")
+func SelfIntro() string {
+	return "Hello, I am from your greetings go package!"
 }
 
 
