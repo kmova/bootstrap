@@ -12,3 +12,4 @@ Intermediate:
 
 Other links:
 - [Go Unit Test Basics](http://blog.alexellis.io/golang-writing-unit-tests/ )
+- [Go Code Coverage - Automated](https://github.com/codecov/example-go)
