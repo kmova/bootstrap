@@ -12,10 +12,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Example package containing sample greetings.
+// Package greetings contains sample greetings used by hello cmd
 package greetings
 
-// Introduce self.
+// SelfIntro will introduce the source of greetings.
 func SelfIntro() string {
 	return "Hello, I am from your greetings go package!"
 }

@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// Helps to run the main in a seperate go-routine.
+// Helps to run the main in a separate go-routine.
 // TBD - Modify the example to show the need for the main
 
 func TestMain(m *testing.M) {
