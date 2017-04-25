@@ -1,5 +1,5 @@
 
-![Go Report](https://goreportcard.com/badge/github.com/kmova/bootstrap)
+[![Go Report](https://goreportcard.com/badge/github.com/kmova/bootstrap)](https://goreportcard.com/badge/github.com/kmova/bootstrap)
 
 
 # Setup Go 
