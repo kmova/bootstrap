@@ -19,6 +19,3 @@ package greetings
 func SelfIntro() string {
 	return "Hello, I am from your greetings go package!"
 }
-
-
-

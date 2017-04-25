@@ -56,6 +56,22 @@ go test -coverprofile=/tmp/hellocover.out github.com/kmova/bootstrap/go/examples
 go tool cover -func=/tmp/hellocover.out
 ```
 
+## gofmt (format the code with current go version style)
+
+Either pass the new/modified directory (package) or go file before checking it in. 
+```
+cd $GOPATH/src
+gofmt -l github.com/kmova/bootstrap/go/examples/hello
+gofmt -w github.com/kmova/bootstrap/go/examples/hello
+```
+
+## godoc (Checking on the documentation)
+```
+cd $GOPATH/src
+godoc  cmd/github.com/kmova/bootstrap/go/examples/hello
+godoc  cmd/github.com/kmova/bootstrap/go/examples/hello/greetings
+```
+
 ## go run 
 
 Use this mechanism when you want to run a specific go file from a respository. We sill run the same hello world program using go run. 
