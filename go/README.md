@@ -1,3 +1,7 @@
+
+![Go Report](https://goreportcard.com/badge/github.com/kmova/bootstrap)
+
+
 # Setup Go 
 
 You can follow the instructions [here](https://golang.org/doc/install) to install go on your machine. 
