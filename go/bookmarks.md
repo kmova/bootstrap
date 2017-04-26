@@ -14,3 +14,5 @@ Other links:
 - [Go Unit Test Basics](http://blog.alexellis.io/golang-writing-unit-tests/ )
 - [Go Code Coverage - Automated](https://github.com/codecov/example-go)
 - [Go Best-Practices/Tips Peter Bourgon - 2016](https://peter.bourgon.org/go-best-practices-2016/)
+- [Glide](https://github.com/Masterminds/glide)
+- [Go Package Vendor -- anti pattern](https://github.com/mattfarina/golang-broken-vendor)
