@@ -8,6 +8,7 @@ Beginner:
 Go Project Structure:
 - [Organizing Go Code](https://talks.golang.org/2014/organizeio.slide#1)
 - [5 Suggestions - Dave Cheney](https://dave.cheney.net/2014/12/01/five-suggestions-for-setting-up-a-go-project)
+- [Hosting Code with custom import path](https://jve.linuxwall.info/blog/index.php?post/2015/08/26/Hosting_Go_code_on_Github_with_custom_import_path)
 
 Intermediate:
 - [Going Go Programming](https://www.goinggo.net/)
