@@ -5,6 +5,9 @@ Beginner:
 - [Go BenchMark Test Basics](https://dave.cheney.net/2013/06/30/how-to-write-benchmarks-in-go)
 - [Go Coverage Basics](https://blog.golang.org/cover)
 
+Go Project Structure:
+- [Organizing Go Code](https://talks.golang.org/2014/organizeio.slide#1)
+- [5 Suggestions - Dave Cheney](https://dave.cheney.net/2014/12/01/five-suggestions-for-setting-up-a-go-project)
 
 Intermediate:
 - [Going Go Programming](https://www.goinggo.net/)
