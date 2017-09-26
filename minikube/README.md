@@ -10,8 +10,10 @@ sudo chgrp -R $USER $HOME/.minikube
 ```
 
 ## Checking Status
+```
 minikube status
 kubectl get pod
+```
 
 ## Refer
 - https://github.com/kubernetes/minikube
