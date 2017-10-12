@@ -60,6 +60,13 @@ export KUBE_DASHBOARD_APISERVER_HOST="http://127.0.0.1:8888"
 *Note: Specify the --address for kubectl proxy, for cases where port-forward
        is setup using IP address*
 
+### Start heapster for metrics in minikube
+
+```
+minikube addons list
+sudo minikube addons enable heapster
+```
+
 ### Build go binary
 ```
 dep ensure -update
