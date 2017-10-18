@@ -30,3 +30,8 @@ kubectl -n kube-system create sa tiller
 kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 kubectl -n kube-system patch deploy/tiller-deploy -p '{"spec": {"template": {"spec": {"serviceAccountName": "tiller"}}}}'
 ```
+
+References:
+- https://gist.github.com/ssudake21/e60d917ede9c0198f1ae56b07a10dd9a
+- https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/
+- https://github.com/kubernetes/helm/issues/2224#issuecomment-299939178
