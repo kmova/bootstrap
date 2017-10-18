@@ -8,14 +8,14 @@ image:
   pullPolicy: IfNotPresent
 
 apiserver:
-  repository: openebs/m-apiserver
-  tag: 0.4.0
+  image: "openebs/m-apiserver"
+  tag: "0.4.0"
 
 provisioner:
-  repository: openebs/openebs-k8s-provisioner
-  tag: 0.4.0
+  image: "openebs/openebs-k8s-provisioner"
+  tag: "0.4.0"
 
 jiva:
-  image: openebs/jiva:0.4.0
+  image: "openebs/jiva:0.4.0"
   replicas: 2
 

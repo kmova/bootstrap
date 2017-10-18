@@ -1,4 +1,5 @@
 Provide instructions to have helm installed. 
+- sudo minikube start --extra-config=apiserver.Authorization.Mode=RBAC
 - wget https://kubernetes-helm.storage.googleapis.com/helm-v2.6.2-linux-amd64.tar.gz
 - tar -xvf helm-v2.6.2-linux-amd64.tar.gz
 - chmod +x linux-amd64/helm
@@ -55,10 +56,36 @@ Update Complete. ⎈ Happy Helming!⎈
 vagrant@minikube-dev:~$ helm ls
 vagrant@minikube-dev:~$ 
 
+  121  kubectl -n kube-system create sa tiller
+  122  kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+  123  kubectl -n kube-system patch deploy/tiller-deploy -p '{"spec": {"template": {"spec": {"serviceAccountName": "tiller"}}}}'
+
+
 ```
 Provide instructions to run openebs from github location
+```
+  142  helm install --name openebs .
+  143  kubectl get pods
+  144  kubectl describe pod maya-apiserver-927297988-jx2q0
+  145  kubectl get pods
+  146  history
+vagrant@minikube-dev:/vagrant/helm/charts/openebs$ pwd
+/vagrant/helm/charts/openebs
+vagrant@minikube-dev:/vagrant/helm/charts/openebs$ 
 
+```
 
+Clearing or deleting openebs via helm
+```
+vagrant@minikube-dev:/vagrant/helm/charts/openebs$ helm ls --all
+NAME   	REVISION	UPDATED                 	STATUS	CHART        	NAMESPACE
+openebs	1       	Wed Oct 18 12:17:10 2017	FAILED	openebs-0.0.1	default  
+vagrant@minikube-dev:/vagrant/helm/charts/openebs$ helm del --purge openebs
+release "openebs" deleted
+vagrant@minikube-dev:/vagrant/helm/charts/openebs$ 
+```
 
 References:
 - https://gist.github.com/ssudake21/e60d917ede9c0198f1ae56b07a10dd9a
+- https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/
+- https://github.com/kubernetes/helm/issues/2224#issuecomment-299939178

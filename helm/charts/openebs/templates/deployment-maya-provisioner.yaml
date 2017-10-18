@@ -16,7 +16,7 @@ spec:
       serviceAccountName: openebs-maya-operator
       containers:
       - name: openebs-provisioner
-        image: "{{ .Values.provisioner.repository }}:{{ .Values.provisioner.tag }}"
+        image: "{{ .Values.provisioner.image }}:{{ .Values.provisioner.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
         - name: NODE_NAME
