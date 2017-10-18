@@ -1,9 +1,12 @@
 
 ## Setup minikube.
-
 ```
 sudo -E minikube start --vm-driver=none
-sudo minikube start
+```
+
+## Start minikube.
+```
+sudo minikube start --extra-config=apiserver.Authorization.Mode=RBAC
 sudo chown -R $USER $HOME/.kube
 sudo chgrp -R $USER $HOME/.kube
 sudo chown -R $USER $HOME/.minikube
