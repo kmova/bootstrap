@@ -102,3 +102,12 @@ sudo docker images
 ```
 
 *openebs/kubernetes-dashboard-amd64* should be listed. 
+
+### Upload the image
+
+```
+ sudo docker tag ${IMAGE_ID} openebs/kubernetes-dashboard-amd64:v0.5.0-2017110801
+ sudo docker images
+ sudo docker login -u "${DNAME}" -p "${DPASS}";
+ sudo docker push openebs/kubernetes-dashboard-amd64:${TAG}
+```
