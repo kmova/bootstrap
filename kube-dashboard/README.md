@@ -24,6 +24,22 @@ cd dashboard/
 git checkout maya-dev
 ```
 
+Configure the upstream branch
+```
+git remote add upstream https://github.com/openebs/openebs.git
+git remote set-url --push upstream no_push
+git remote -v
+```
+
+Rebase with master
+```
+git fetch upstream master
+git rebase upstream/master
+git status
+git push
+```
+
+
 ### Install Dependencies
 
 Refer: https://github.com/kubernetes/dashboard/wiki/Getting-started
