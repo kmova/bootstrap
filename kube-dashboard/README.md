@@ -68,6 +68,9 @@ vagrant@minikube-dev:~$ kubectl proxy --address="10.0.2.15"
 Starting to serve on 10.0.2.15:8001
 ```
 Make sure that dashboard is accessible via http://127.0.0.1:8888/ui
+Latest dashboard (1.7.x)+ is available at http://localhost:8888/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+
+This may require authentication via kube-token (See https://github.com/kubernetes/dashboard/wiki/Accessing-Dashboard---1.7.X-and-above)
 
 ```
 export KUBE_DASHBOARD_APISERVER_HOST="http://127.0.0.1:8888"
@@ -106,8 +109,23 @@ sudo docker images
 ### Upload the image
 
 ```
- sudo docker tag ${IMAGE_ID} openebs/kubernetes-dashboard-amd64:v0.5.0-2017110801
- sudo docker images
+ sudo docker tag ${IMAGE_ID} openebs/kubernetes-dashboard-amd64:${TAG}
+ sudo docker tag ${IMAGE_ID} openebs/kubernetes-dashboard-amd64:latest
  sudo docker login -u "${DNAME}" -p "${DPASS}";
  sudo docker push openebs/kubernetes-dashboard-amd64:${TAG}
+ sudo docker push openebs/kubernetes-dashboard-amd64:latest
+```
+
+### Steps to run in minikube
+
+Stop the default dashboard
+
+```
+sudo minikube addons disable dashboard
+```
+
+Run the dashboard using the image built above
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kmova/bootstrap/master/kube-dashboard/openebs-kubernetes-dashboard.yaml
 ```
