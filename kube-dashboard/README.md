@@ -93,3 +93,12 @@ dep ensure -update
 ```
 gulp serve
 ```
+
+### Building local image 
+```
+export DOCKER_HUB_PREFIX=openebs
+gulp docker-image:head
+sudo docker images
+```
+
+*openebs/kubernetes-dashboard-amd64* should be listed. 
