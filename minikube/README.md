@@ -26,5 +26,10 @@ kubectl proxy --address="10.0.2.15"
 
 From the browser access: http://127.0.0.1:8888/ui/
 
+## Starting minikube with custom cluster-ip range
+```
+minikube start --extra-config=apiserver.ServiceClusterIPRange=40.0.0.0/16
+```
+
 ## Refer
 - https://github.com/kubernetes/minikube
