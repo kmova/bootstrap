@@ -50,3 +50,14 @@ maya-apiserver-service   ClusterIP   10.55.250.40   <none>        5656/TCP   1m
 kiran_mova@kmova-dev:~/infra/demo-openebs$ 
 ```
 
+```
+kiran_mova@kmova-dev:~/infra/demo-openebs$ kubectl apply -f https://openebs.github.io/charts/openebs-monitoring-pg.yaml 
+configmap "openebs-prometheus-tunables" created
+configmap "openebs-prometheus-config" created
+deployment "openebs-prometheus" created
+service "openebs-prometheus-service" created
+service "openebs-grafana" created
+deployment "openebs-grafana" created
+kiran_mova@kmova-dev:~/infra/demo-openebs$ 
+```
+
