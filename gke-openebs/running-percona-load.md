@@ -31,3 +31,28 @@ e26
 --More--
 
 ```
+
+```
+kiran_mova@kmova-dev:~/infra/demo-openebs$ vi sql-loadgen.yaml 
+kiran_mova@kmova-dev:~/infra/demo-openebs$ cat sql-loadgen.yaml 
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sql-loadgen
+spec:
+  template:
+    metadata:
+      name: sql-loadgen
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: sql-loadgen
+        image: openebs/tests-mysql-client
+        command: ["/bin/bash"]
+        args: ["-c", "timelimit -t 300 sh MySQLLoadGenerate.sh 10.52.2.5 > /dev/null 2>&1; exit 0"]
+        tty: true 
+kiran_mova@kmova-dev:~/infra/demo-openebs$
+```
+
+
