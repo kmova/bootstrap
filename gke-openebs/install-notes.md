@@ -38,3 +38,15 @@ Switched to context "gke_strong-eon-153112_us-central1-a_demo-openebs".
 kiran_mova@kmova-dev:~/infra/demo-openebs$ 
 ```
 
+```
+kiran_mova@kmova-dev:~/infra/demo-openebs$ kubectl get pods
+NAME                                   READY     STATUS    RESTARTS   AGE
+maya-apiserver-2288016177-qh7sx        1/1       Running   0          1m
+openebs-provisioner-2835097941-8hpts   1/1       Running   0          1m
+kiran_mova@kmova-dev:~/infra/demo-openebs$ kubectl get svc
+NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+kubernetes               ClusterIP   10.55.240.1    <none>        443/TCP    14m
+maya-apiserver-service   ClusterIP   10.55.250.40   <none>        5656/TCP   1m
+kiran_mova@kmova-dev:~/infra/demo-openebs$ 
+```
+
