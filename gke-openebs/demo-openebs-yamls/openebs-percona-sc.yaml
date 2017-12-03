@@ -1,0 +1,10 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-percona
+parameters:
+  openebs.io/capacity: 5G
+  openebs.io/jiva-replica-count: "2"
+  openebs.io/storage-pool: default
+  openebs.io/volume-monitor: "true"
+provisioner: openebs.io/provisioner-iscsi
