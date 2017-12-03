@@ -61,3 +61,19 @@ deployment "openebs-grafana" created
 kiran_mova@kmova-dev:~/infra/demo-openebs$ 
 ```
 
+```
+kiran_mova@kmova-dev:~/infra/demo-openebs$ kubectl get pods
+NAME                                   READY     STATUS    RESTARTS   AGE
+maya-apiserver-2288016177-qh7sx        1/1       Running   0          5m
+openebs-grafana-2789105701-1plmf       1/1       Running   0          2m
+openebs-prometheus-4109589487-w1j6l    1/1       Running   0          2m
+openebs-provisioner-2835097941-8hpts   1/1       Running   0          5m
+kiran_mova@kmova-dev:~/infra/demo-openebs$ 
+kiran_mova@kmova-dev:~/infra/demo-openebs$ kubectl get svc
+NAME                         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+kubernetes                   ClusterIP   10.55.240.1    <none>        443/TCP          17m
+maya-apiserver-service       ClusterIP   10.55.250.40   <none>        5656/TCP         5m
+openebs-grafana              NodePort    10.55.242.8    <none>        3000:32515/TCP   2m
+openebs-prometheus-service   NodePort    10.55.249.80   <none>        80:32514/TCP     2m
+kiran_mova@kmova-dev:~/infra/demo-openebs$
+```
