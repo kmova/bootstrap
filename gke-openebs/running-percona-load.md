@@ -55,4 +55,11 @@ spec:
 kiran_mova@kmova-dev:~/infra/demo-openebs$
 ```
 
-
+```
+kiran_mova@kmova-dev:~/infra/demo-openebs$ kubectl apply -f sql-loadgen.yaml 
+job "sql-loadgen" created
+kiran_mova@kmova-dev:~/infra/demo-openebs$ kubectl get jobs
+NAME          DESIRED   SUCCESSFUL   AGE
+sql-loadgen   1         0            7s
+kiran_mova@kmova-dev:~/infra/demo-openebs$ 
+```
