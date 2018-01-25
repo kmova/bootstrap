@@ -1,5 +1,7 @@
 Refer:
 - https://github.com/kmova/devstats/blob/master/INSTALL_UBUNTU16.md
+- https://github.com/golang/go/wiki/Ubuntu
+
 
 
 Setup Ubuntu 16.06 on GCP: 
@@ -16,6 +18,7 @@ Prerequisites:
     - For example add to `~/.bash_profile` and/or `~/.profile`:
      ```
      PATH="/usr/lib/go-1.9/bin:$PATH"
+     GOROOT="/usr/lib/go-1.9"; export GOROOT
      GOPATH=$HOME/data/dev; export GOPATH
      PATH=$PATH:$GOPATH/bin; export PATH
      ```
