@@ -73,3 +73,22 @@ Prerequisites:
     - `wget https://devstats.cncf.io/gha.sql.xz` (it is about 400Mb).
     - `xz -d gha.sql.xz` (uncompressed dump is more than 7Gb).
     - `sudo -u postgres psql gha < gha.sql` (restore DB dump)
+
+10. Install InfluxDB time-series database ([link](https://docs.influxdata.com/influxdb/v0.9/introduction/installation/)):
+    - Ubuntu 16 contains very old `influxdb` when installed by default `apt-get install influxdb`, so:
+    - `curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -`
+    - `source /etc/lsb-release`
+    - `echo "deb https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list`
+    - `sudo apt-get update && sudo apt-get install influxdb`
+    - `sudo service influxdb start`
+    - Create InfluxDB user, database: `IDB_HOST="127.0.0.1" IDB_PASS='your_password_here' ./grafana/influxdb_setup.sh gha`
+    - InfluxDB has authentication disabled by default.
+    - Edit config file `vim /etc/influxdb/influxdb.conf` and change section `[http]`, `auth-enabled = true` and `[subscriber]` `http-timeout = "300s"`
+    - If You want to disable external InfluxDB access (for any external IP, only localhost) follow those instructions [SECURE_INFLUXDB.md](https://github.com/cncf/devstats/blob/master/SECURE_INFLUXDB.md).
+    - `sudo service influxdb restart`
+    
+11. Databases installed, you need to test if all works fine, use database test coverage:
+    - `GHA2DB_PROJECT=kubernetes IDB_DB=dbtest IDB_HOST="127.0.0.1" IDB_PASS=your_influx_pwd PG_DB=dbtest PG_PASS=your_postgres_pwd make dbtest`
+    - Tests should pass.    
+    
+    
