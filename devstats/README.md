@@ -36,9 +36,40 @@ Prerequisites:
     - Go OAuth2 client: `go get golang.org/x/oauth2`
     
 2. Go to $GOPATH/src/ and clone devstats there:
-    - `mkdir github.com/cncf; cd github.com/cncf`
     - `git clone https://github.com/your_github_username/devstats.git`
     - `cd devstats`
     - Set reuse TCP connections (Golang InfluxDB may need this under heavy load): `sudo ./scripts/net_tcp_config.sh`
 
 3. (Merged this into above.)
+
+4. Go to devstats directory, so you are in `$GOPATH/src/devstats` directory and compile binaries:
+    - `make`
+    
+5. If compiled sucessfully then execute test coverage that doesn't need databases:
+    - `make test`
+    - Tests should pass.
+6. Install binaries & metrics:
+    - `sudo mkdir -p /etc/gha2db/metrics/`
+    - `sudo chmod 777 /etc/gha2db`
+    - `sudo make install`    
+
+7. Install Postgres database ([link](https://gist.github.com/sgnl/609557ebacd3378f3b72)):
+    - apt-get install postgresql 
+    - sudo -i -u postgres
+    - psql
+    - Postgres only allows local connections by default so it is secure, we don't need to disable external connections:
+    - Instructions to enable external connections (not recommended): `http://www.thegeekstuff.com/2014/02/enable-remote-postgresql-connection/?utm_source=tuicool`
+    
+8. Inside psql client shell:
+    - `create database gha;`
+    - `create database devstats;`
+    - `create user gha_admin with password 'your_password_here';`
+    - `grant all privileges on database "gha" to gha_admin;`
+    - `grant all privileges on database "devstats" to gha_admin;`
+    - `alter user gha_admin createdb;`
+    - Leave the shell and create logs table for devstats: `sudo -u postgres psql devstats < util_sql/devstats_log_table.sql`.
+
+9. Leave `psql` shell, and get newest Kubernetes database dump:
+    - `wget https://devstats.cncf.io/gha.sql.xz` (it is about 400Mb).
+    - `xz -d gha.sql.xz` (uncompressed dump is more than 7Gb).
+    - `sudo -u postgres psql gha < gha.sql` (restore DB dump)
