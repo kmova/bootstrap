@@ -20,3 +20,21 @@ https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-with-snap-on-ubu
     4  curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-lin
 ux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
     5  minikube
+
+  17  mkdir $HOME/.kube || true
+   18  touch $HOME/.kube/config
+   19  vi ~/.profile
+   
+   
+   export MINIKUBE_WANTUPDATENOTIFICATION=false
+export MINIKUBE_WANTREPORTERRORPROMPT=false
+export MINIKUBE_HOME=$HOME
+export CHANGE_MINIKUBE_NONE_USER=true
+export KUBECONFIG=$HOME/.kube/config
+
+   
+      20  source ~/.profile
+      22  sudo -E minikube start --vm-driver=none
+   23  sudo docker images
+   24  kubectl get pods
+   25  kubectl get pods --all-namespaces
