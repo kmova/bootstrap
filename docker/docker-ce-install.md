@@ -39,11 +39,16 @@ export KUBECONFIG=$HOME/.kube/config
    24  kubectl get pods
    25  kubectl get pods --all-namespaces
    
-   
+  
+  
+  
+  
+  
    ```
    ExecStart=/usr/local/bin/localkube   --dns-domain=cluster.local --node-ip=10.128.0.12 --generate-certs=false --logtostderr=true --enable-dns=false --apiserver-insecure-address=0.0.0.0 --apiserver-insecure-port=8080 --apiserver-port=0 --extra-config=controller-manager.master=http://10.128.0.12:8080/ --generate-kubeconfig=true
    ```
    
+  - building localkube https://github.com/kubernetes/minikube/blob/master/docs/contributors/releasing_localkube.md 
    
    ```
    kiran_mova@kmova-minikube:~/go/src/k8s.io/minikube$ git diff 
