@@ -41,6 +41,9 @@ rules:
   verbs: [ "get", "list", "create" ]
 - nonResourceURLs: ["/metrics"]
   verbs: ["get"]
+- apiGroups: ["*"]
+  resources: ["storagepools"] 
+  verbs: ["get", "list"]
 ---
 # Bind the Service Account with the Role Privileges.
 # TODO: Check if default account also needs to be there
@@ -77,20 +80,20 @@ spec:
       containers:
       - name: maya-apiserver
         imagePullPolicy: Always
-        image: openebs/m-apiserver:0.5.2-RC1
+        image: openebs/m-apiserver:0.5.3
         ports:
         - containerPort: 5656
         env:
         #- name: OPENEBS_IO_K8S_MASTER
         #  value: "http://10.128.0.12:8080"
         - name: OPENEBS_IO_JIVA_CONTROLLER_IMAGE
-          value: "openebs/jiva:0.5.1"
+          value: "openebs/jiva:0.5.3"
         - name: OPENEBS_IO_JIVA_REPLICA_IMAGE
-          value: "openebs/jiva:0.5.1"
+          value: "openebs/jiva:0.5.3"
         - name: OPENEBS_IO_VOLUME_MONITOR_IMAGE
-          value: "openebs/m-exporter:0.5.1"
+          value: "openebs/m-exporter:0.5.3"
         - name: OPENEBS_IO_JIVA_REPLICA_COUNT
-          value: "2"
+          value: "3"
 ---
 apiVersion: v1
 kind: Service
@@ -123,7 +126,7 @@ spec:
       containers:
       - name: openebs-provisioner
         imagePullPolicy: Always
-        image: openebs/openebs-k8s-provisioner:0.5.2-RC1
+        image: openebs/openebs-k8s-provisioner:0.5.3
         env:
         #- name: OPENEBS_IO_K8S_MASTER
         #  value: "http://10.128.0.12:8080"
@@ -195,6 +198,6 @@ metadata:
 provisioner: openebs.io/provisioner-iscsi
 parameters:
   openebs.io/storage-pool: "default"
-  openebs.io/jiva-replica-count: "2"
+  openebs.io/jiva-replica-count: "3"
   openebs.io/volume-monitor: "true"
   openebs.io/capacity: 5G
