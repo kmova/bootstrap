@@ -85,6 +85,13 @@ cd $GOPATH/src/github.com/kmova/bootstrap/go
 goconst -ignore "vendor" -min-occurrences 2 ./... 
 ```
 
+## staticcheck ( Check for vulnerabilities in the code)
+Install [staticcheck](https://staticcheck.io/docs/staticcheck) `go get honnef.co/go/tools/cmd/staticcheck`
+
+```
+staticcheck github.com/kmova/bootstrap/go/...
+```
+
 ## go run 
 
 Use this mechanism when you want to run a specific go file from a respository. We sill run the same hello world program using go run. 
