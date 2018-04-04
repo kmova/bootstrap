@@ -76,6 +76,15 @@ godoc  cmd/github.com/kmova/bootstrap/go/examples/hello
 godoc  cmd/github.com/kmova/bootstrap/go/examples/hello/greetings
 ```
 
+## goconst (Checking for usage of constants that could be avoided)
+
+Install [goconst](https://github.com/jgautheron/goconst) `go get github.com/jgautheron/goconst/cmd/goconst`
+
+```
+cd $GOPATH/src/github.com/kmova/bootstrap/go
+goconst -ignore "vendor" -min-occurrences 2 ./... 
+```
+
 ## go run 
 
 Use this mechanism when you want to run a specific go file from a respository. We sill run the same hello world program using go run. 
