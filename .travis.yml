@@ -14,7 +14,7 @@ before_install:
   - curl -Lo minikube.bin https://storage.googleapis.com/minikube/releases/v0.26.0/minikube-linux-amd64
   - sudo chmod +x minikube.bin
   - sudo mv minikube.bin /usr/local/bin/minikube
-  - systemctl show --property=Environment docker
+  #- systemctl show --property=Environment docker
   - sudo minikube start --v=999 --logtostderr --vm-driver=none --kubernetes-version=v1.9.4
   #- sudo minikube start --v=10 --logtostderr --vm-driver=none --kubernetes-version=v1.9.4 --extra-config=apiserver.Authorization.Mode=RBAC
   - minikube update-context
