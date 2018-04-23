@@ -9,10 +9,10 @@ install: true
 
 before_script:
   # Download kubectl, which is a requirement for using minikube.
-  - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.5/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+  - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.9.4/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
   # Download minikube.
   - curl -Lo minikube.bin https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube.bin && sudo mv minikube.bin /usr/local/bin/minikube
-  - sudo minikube start --vm-driver=none --kubernetes-version=v1.7.5
+  - sudo minikube start --v=999 --logtostderr --vm-driver=none --kubernetes-version=v1.9.4
   # Fix the kubectl context, as it's often stale.
   - minikube update-context
   # Wait for Kubernetes to be up and ready.
