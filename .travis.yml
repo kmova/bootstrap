@@ -1,4 +1,5 @@
-dist: trusty
+dist: xenial
+#dist: trusty
 sudo: required
 language: go
 
@@ -13,6 +14,8 @@ services: docker
 install: true
 
 before_script:
+  - sudo uname -a
+  - cat /etc/os-release
   - sudo docker version
   # Download kubectl, which is a requirement for using minikube.
   - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
