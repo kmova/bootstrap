@@ -1,0 +1,15 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: demo-vol2-claim
+  labels:
+    "volumeprovisioner.mapi.openebs.io/replica-topology-key-domain": "failure-domain.beta.kubernetes.io"
+    "volumeprovisioner.mapi.openebs.io/replica-topology-key-type": "zone"
+spec:
+  storageClassName: openebs-standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4G
+
