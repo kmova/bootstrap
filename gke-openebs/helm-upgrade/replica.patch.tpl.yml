@@ -19,49 +19,50 @@
         "spec": {
            "containers":[
               {
+                "name": "pvc-24eb6f8f-9083-11e8-89fc-42010a800236-rep-con",
                 "image": "openebs/jiva:0.6.0"
               }
            ]
         },
         "tolerations": [
           {
-            "effect": "NoExecute"
-            "key": "node.kubernetes.io/not-ready"
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
             "operator": "Exists"
           },
           {
-            "effect": "NoExecute"
-            "key": "node.kubernetes.io/unreachable"
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
             "operator": "Exists"
           },
           {
-            "effect": "NoExecute"
-            "key": "node.kubernetes.io/out-of-disk"
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/out-of-disk",
             "operator": "Exists"
           },
           {
-            "effect": "NoExecute"
-            "key": "node.kubernetes.io/memory-pressure"
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/memory-pressure",
             "operator": "Exists"
           },
           {
-            "effect": "NoExecute"
-            "key": "node.kubernetes.io/disk-pressure"
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/disk-pressure",
             "operator": "Exists"
           },
           {
-            "effect": "NoExecute"
-            "key": "node.kubernetes.io/network-unavailable"
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/network-unavailable",
             "operator": "Exists"
           },
           {
-            "effect": "NoExecute"
-            "key": "node.kubernetes.io/unschedulable"
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unschedulable",
             "operator": "Exists"
           },
           {
-            "effect": "NoExecute"
-            "key": "node.cloudprovider.kubernetes.io/uninitialized"
+            "effect": "NoExecute",
+            "key": "node.cloudprovider.kubernetes.io/uninitialized",
             "operator": "Exists"
           }
         ]

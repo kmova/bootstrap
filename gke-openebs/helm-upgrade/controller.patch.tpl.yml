@@ -1,33 +1,20 @@
 {
-  "metadata": {
-     "labels": {
-       "openebs/volume-provisioner": "jiva"
-     }
-  },
   "spec": {
-     "selector": {
-        "matchLabels": {
-           "openebs/volume-provisioner": "jiva"
-        }
-     },
      "template": {
-        "metadata": {
-           "labels": {
-              "openebs/volume-provisioner": "jiva"
-           }
-        },
         "spec": {
            "containers":[
               {
+                "name": "pvc-24eb6f8f-9083-11e8-89fc-42010a800236-ctrl-con",
                 "image": "openebs/jiva:0.6.0",
                 "env":[
                   {
-                    "name": "REPLICATION_FACTOR"
+                    "name": "REPLICATION_FACTOR",
                     "value": "1"
                   }
                 ]
               },
               {
+                "name": "maya-volume-exporter",
                 "command": [
                    "maya-exporter"
                 ],
@@ -37,15 +24,15 @@
         },
         "tolerations": [
           {
-            "effect": "NoExecute"
-            "key": "node.kubernetes.io/not-ready"
-            "operator": "Exists"
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
             "tolerationSeconds": "0"
           },
           {
-            "effect": "NoExecute"
-            "key": "node.kubernetes.io/unreachable"
-            "operator": "Exists"
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
             "tolerationSeconds": "0"
           }
         ]
