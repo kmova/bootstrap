@@ -19,7 +19,7 @@
         "spec": {
            "containers":[
               {
-                "name": "pvc-24eb6f8f-9083-11e8-89fc-42010a800236-ctrl-con",
+                "name": "pvc-<deploy-hash>-ctrl-con",
                 "image": "openebs/jiva:0.6.0",
                 "env":[
                   {
@@ -35,22 +35,22 @@
                 ],
                 "image": "openebs/m-exporter:0.6.0"
               }
-           ] 
-        },
-        "tolerations": [
-          {
-            "effect": "NoExecute",
-            "key": "node.kubernetes.io/not-ready",
-            "operator": "Exists",
-            "tolerationSeconds": "0"
-          },
-          {
-            "effect": "NoExecute",
-            "key": "node.kubernetes.io/unreachable",
-            "operator": "Exists",
-            "tolerationSeconds": "0"
-          }
-        ]
+           ], 
+          "tolerations": [
+            {
+              "effect": "NoExecute",
+              "key": "node.kubernetes.io/not-ready",
+              "operator": "Exists",
+              "tolerationSeconds": "0"
+            },
+            {
+              "effect": "NoExecute",
+              "key": "node.kubernetes.io/unreachable",
+              "operator": "Exists",
+              "tolerationSeconds": "0"
+            }
+          ]
+        }
      }
   }
 } 
