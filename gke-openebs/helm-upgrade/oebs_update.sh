@@ -32,8 +32,8 @@ r_rs=$(kubectl get rs -o name --namespace $ns | grep $r_dep | cut -d '/' -f 2)
 # the PV in the previous step                                  #  
 ################################################################
 
-sed -i "s/pvc[^ \"]*/$r_name/g" replica.patch.tpl.yml
-sed -i "s/pvc[^ \"]*/$c_name/g" controller.patch.tpl.yml
+sed "s/pvc[^ \"]*/$r_name/g" replica.patch.tpl.yml > replica.patch.yml
+sed "s/pvc[^ \"]*/$c_name/g" controller.patch.tpl.yml > controller.patch.yml
 
 ################################################################
 # STEP: Patch OpenEBS volume deployments (controller, replica) #  
@@ -43,7 +43,7 @@ sed -i "s/pvc[^ \"]*/$c_name/g" controller.patch.tpl.yml
 ################################################################
 
 # PATCH JIVA REPLICA DEPLOYMENT ####
-kubectl patch deployment --namespace $ns $r_dep -p "$(cat replica.patch.tpl.yml)"
+kubectl patch deployment --namespace $ns $r_dep -p "$(cat replica.patch.yml)"
 rc=$?; if [ $rc -ne 0 ]; then echo "ERROR: $rc"; exit; fi
 
 rollout_status=$(kubectl rollout status --namespace $ns deployment/$r_dep)
@@ -51,7 +51,7 @@ rc=$?; if [[ ($rc -ne 0) || !($rollout_status =~ "successfully rolled out") ]];
 then echo "ERROR: $rc"; exit; fi
 
 #### PATCH CONTROLLER DEPLOYMENT ####
-kubectl patch deployment  --namespace $ns $c_dep -p "$(cat controller.patch.tpl.yml)"
+kubectl patch deployment  --namespace $ns $c_dep -p "$(cat controller.patch.yml)"
 rc=$?; if [ $rc -ne 0 ]; then echo "ERROR: $rc"; exit; fi
 
 rollout_status=$(kubectl rollout status --namespace $ns  deployment/$c_dep)
