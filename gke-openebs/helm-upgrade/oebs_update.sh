@@ -64,8 +64,7 @@ then echo "ERROR: $rc"; exit; fi
 # NOTES: This step is applicable upon label selector updates,  #
 # where the deployment creates orphaned replicasets            #
 ################################################################
-kubectl delete rs $c_rs 
-kubectl delete rs $r_rs 
-
+kubectl delete rs $c_rs --namespace $ns
+kubectl delete rs $r_rs --namespace $ns
 
 
