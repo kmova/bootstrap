@@ -1,0 +1,70 @@
+{
+  "metadata": {
+     "labels": {
+       "openebs/volume-provisioner": "jiva"
+     }
+  },
+  "spec": {
+     "selector": {
+        "matchLabels": {
+           "openebs/volume-provisioner": "jiva"
+        }
+     },
+     "template": {
+        "metadata": {
+           "labels": {
+              "openebs/volume-provisioner": "jiva"
+           }
+        },
+        "spec": {
+           "containers":[
+              {
+                "image": "openebs/jiva:0.6.0"
+              }
+           ]
+        },
+        "tolerations": [
+          {
+            "effect": "NoExecute"
+            "key": "node.kubernetes.io/not-ready"
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoExecute"
+            "key": "node.kubernetes.io/unreachable"
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoExecute"
+            "key": "node.kubernetes.io/out-of-disk"
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoExecute"
+            "key": "node.kubernetes.io/memory-pressure"
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoExecute"
+            "key": "node.kubernetes.io/disk-pressure"
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoExecute"
+            "key": "node.kubernetes.io/network-unavailable"
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoExecute"
+            "key": "node.kubernetes.io/unschedulable"
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoExecute"
+            "key": "node.cloudprovider.kubernetes.io/uninitialized"
+            "operator": "Exists"
+          }
+        ]
+     }
+  }
+} 
