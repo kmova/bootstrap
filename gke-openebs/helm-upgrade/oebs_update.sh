@@ -46,7 +46,7 @@ sed -i "s/pvc[^ \"]*/$c_name/g" controller.patch.tpl.yml
 kubectl patch deployment --namespace $ns $r_dep -p "$(cat replica.patch.tpl.yml)"
 rc=$?; if [ $rc -ne 0 ]; then echo "ERROR: $rc"; exit; fi
 
-#rollout_status=$(kubectl rollout status --namespace $ns deployment/$r_dep)
+rollout_status=$(kubectl rollout status --namespace $ns deployment/$r_dep)
 rc=$?; if [[ ($rc -ne 0) || !($rollout_status =~ "successfully rolled out") ]];
 then echo "ERROR: $rc"; exit; fi
 
