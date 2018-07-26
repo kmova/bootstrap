@@ -21,7 +21,8 @@ ns=$2
 c_dep=$(echo $pv-ctrl); c_name=$(echo $c_dep-con)
 r_dep=$(echo $pv-rep); r_name=$(echo $r_dep-con)
 
-#c_rs=$(kubectl get rs -o name | grep $c_dep | cut -d '/' -f 2)
+c_rs=$(kubectl get rs -o name --namespace $ns | grep $c_dep | cut -d '/' -f 2)
+r_rs=$(kubectl get rs -o name --namespace $ns | grep $r_dep | cut -d '/' -f 2)
 
 ################################################################ 
 # STEP: Update patch files with appropriate container names    #
@@ -31,8 +32,8 @@ r_dep=$(echo $pv-rep); r_name=$(echo $r_dep-con)
 # the PV in the previous step                                  #  
 ################################################################
 
-#sed -i "s/pvc[^ \"]*/$r_name/g" replica.patch.tpl.yml
-#sed -i "s/pvc[^ \"]*/$c_name/g" controller.patch.tpl.yml
+sed -i "s/pvc[^ \"]*/$r_name/g" replica.patch.tpl.yml
+sed -i "s/pvc[^ \"]*/$c_name/g" controller.patch.tpl.yml
 
 ################################################################
 # STEP: Patch OpenEBS volume deployments (controller, replica) #  
@@ -45,7 +46,7 @@ r_dep=$(echo $pv-rep); r_name=$(echo $r_dep-con)
 kubectl patch deployment --namespace $ns $r_dep -p "$(cat replica.patch.tpl.yml)"
 rc=$?; if [ $rc -ne 0 ]; then echo "ERROR: $rc"; exit; fi
 
-rollout_status=$(kubectl rollout status --namespace $ns deployment/$r_dep)
+#rollout_status=$(kubectl rollout status --namespace $ns deployment/$r_dep)
 rc=$?; if [[ ($rc -ne 0) || !($rollout_status =~ "successfully rolled out") ]];
 then echo "ERROR: $rc"; exit; fi
 
@@ -63,7 +64,8 @@ then echo "ERROR: $rc"; exit; fi
 # NOTES: This step is applicable upon label selector updates,  #
 # where the deployment creates orphaned replicasets            #
 ################################################################
-#kubectl delete rs $c_rs 
+kubectl delete rs $c_rs 
+kubectl delete rs $r_rs 
 
 
 
