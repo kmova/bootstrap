@@ -1,0 +1,54 @@
+{
+  "metadata": {
+     "labels": {
+       "openebs/volume-provisioner": "jiva"
+     }
+  },
+  "spec": {
+     "selector": {
+        "matchLabels": {
+           "openebs/volume-provisioner": "jiva"
+        }
+     },
+     "template": {
+        "metadata": {
+           "labels": {
+              "openebs/volume-provisioner": "jiva"
+           }
+        },
+        "spec": {
+           "containers":[
+              {
+                "image": "openebs/jiva:0.6.0",
+                "env":[
+                  {
+                    "name": "REPLICATION_FACTOR"
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "command": [
+                   "maya-exporter"
+                ],
+                "image": "openebs/m-exporter:0.6.0",
+              }
+           ] 
+        },
+        "tolerations": [
+          {
+            "effect": "NoExecute"
+            "key": "node.kubernetes.io/not-ready"
+            "operator": "Exists"
+            "tolerationSeconds": "0"
+          },
+          {
+            "effect": "NoExecute"
+            "key": "node.kubernetes.io/unreachable"
+            "operator": "Exists"
+            "tolerationSeconds": "0"
+          }
+        ]
+     }
+  }
+} 

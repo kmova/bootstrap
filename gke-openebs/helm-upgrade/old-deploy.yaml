@@ -1,0 +1,204 @@
+apiVersion: v1
+items:
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      openebs.io/volume-monitor: "true"
+      openebs.io/volume-type: jiva
+    creationTimestamp: 2018-07-26T03:22:37Z
+    generation: 1
+    labels:
+      openebs/controller: jiva-controller
+      openebs/volume-provisioner: jiva
+      vsm: pvc-24eb6f8f-9083-11e8-89fc-42010a800236
+    name: pvc-24eb6f8f-9083-11e8-89fc-42010a800236-ctrl
+    namespace: percona-test
+    resourceVersion: "1391"
+    selfLink: /apis/extensions/v1beta1/namespaces/percona-test/deployments/pvc-24eb6f8f-9083-11e8-89fc-42010a800236-ctrl
+    uid: 24fd8dfe-9083-11e8-89fc-42010a800236
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        monitoring: volume_exporter_prometheus
+        openebs/controller: jiva-controller
+        vsm: pvc-24eb6f8f-9083-11e8-89fc-42010a800236
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 1
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          monitoring: volume_exporter_prometheus
+          openebs/controller: jiva-controller
+          vsm: pvc-24eb6f8f-9083-11e8-89fc-42010a800236
+      spec:
+        containers:
+        - args:
+          - controller
+          - --frontend
+          - gotgt
+          - --clusterIP
+          - 10.55.241.24
+          - pvc-24eb6f8f-9083-11e8-89fc-42010a800236
+          command:
+          - launch
+          image: openebs/jiva:0.5.3
+          imagePullPolicy: IfNotPresent
+          name: pvc-24eb6f8f-9083-11e8-89fc-42010a800236-ctrl-con
+          ports:
+          - containerPort: 3260
+            protocol: TCP
+          - containerPort: 9501
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - args:
+          - -c=http://127.0.0.1:9501
+          command:
+          - maya-volume-exporter
+          image: openebs/m-exporter:0.5.3
+          imagePullPolicy: IfNotPresent
+          name: maya-volume-exporter
+          ports:
+          - containerPort: 9500
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - effect: NoExecute
+          key: node.alpha.kubernetes.io/notReady
+          operator: Exists
+          tolerationSeconds: 0
+        - effect: NoExecute
+          key: node.alpha.kubernetes.io/unreachable
+          operator: Exists
+          tolerationSeconds: 0
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: 2018-07-26T03:22:37Z
+      lastUpdateTime: 2018-07-26T03:22:37Z
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      openebs.io/storage-pool: default
+    creationTimestamp: 2018-07-26T03:22:37Z
+    generation: 1
+    labels:
+      openebs/replica: jiva-replica
+      openebs/volume-provisioner: jiva
+      vsm: pvc-24eb6f8f-9083-11e8-89fc-42010a800236
+    name: pvc-24eb6f8f-9083-11e8-89fc-42010a800236-rep
+    namespace: percona-test
+    resourceVersion: "1383"
+    selfLink: /apis/extensions/v1beta1/namespaces/percona-test/deployments/pvc-24eb6f8f-9083-11e8-89fc-42010a800236-rep
+    uid: 250901f8-9083-11e8-89fc-42010a800236
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        openebs/replica: jiva-replica
+        vsm: pvc-24eb6f8f-9083-11e8-89fc-42010a800236
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 1
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          openebs/replica: jiva-replica
+          vsm: pvc-24eb6f8f-9083-11e8-89fc-42010a800236
+      spec:
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  openebs/replica: jiva-replica
+                  vsm: pvc-24eb6f8f-9083-11e8-89fc-42010a800236
+              topologyKey: kubernetes.io/hostname
+        containers:
+        - args:
+          - replica
+          - --frontendIP
+          - 10.55.241.24
+          - --size
+          - 5G
+          - /openebs
+          command:
+          - launch
+          image: openebs/jiva:0.5.3
+          imagePullPolicy: IfNotPresent
+          name: pvc-24eb6f8f-9083-11e8-89fc-42010a800236-rep-con
+          ports:
+          - containerPort: 9502
+            protocol: TCP
+          - containerPort: 9503
+            protocol: TCP
+          - containerPort: 9504
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /openebs
+            name: openebs
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - effect: NoExecute
+          key: node.alpha.kubernetes.io/notReady
+          operator: Exists
+        - effect: NoExecute
+          key: node.alpha.kubernetes.io/unreachable
+          operator: Exists
+        volumes:
+        - hostPath:
+            path: /var/openebs/pvc-24eb6f8f-9083-11e8-89fc-42010a800236
+            type: ""
+          name: openebs
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: 2018-07-26T03:22:37Z
+      lastUpdateTime: 2018-07-26T03:22:37Z
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
