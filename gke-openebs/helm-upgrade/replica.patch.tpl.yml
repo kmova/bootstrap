@@ -26,6 +26,16 @@
           "tolerations": [
             {
               "effect": "NoExecute",
+              "key": "node.alpha.kubernetes.io/notReady",
+              "operator": "Exists",
+            },
+            {
+              "effect": "NoExecute",
+              "key": "node.alpha.kubernetes.io/unreachable",
+              "operator": "Exists",
+            },
+            {
+              "effect": "NoExecute",
               "key": "node.kubernetes.io/not-ready",
               "operator": "Exists"
             },
