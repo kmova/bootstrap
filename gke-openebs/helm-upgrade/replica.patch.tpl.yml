@@ -1,25 +1,28 @@
 {
   "metadata": {
      "labels": {
-       "openebs/volume-provisioner": "jiva"
+       "openebs/volume-provisioner": "jiva",
+       "pvc": "@pvc-name"
      }
   },
   "spec": {
      "selector": {
         "matchLabels": {
-           "openebs/volume-provisioner": "jiva"
+           "openebs/volume-provisioner": "jiva",
+           "pvc": "@pvc-name"
         }
      },
      "template": {
         "metadata": {
            "labels": {
-              "openebs/volume-provisioner": "jiva"
+              "openebs/volume-provisioner": "jiva",
+              "pvc": "@pvc-name"
            }
         },
         "spec": {
            "containers":[
               {
-                "name": "pvc-<deploy-hash>-rep-con",
+                "name": "@r_name",
                 "image": "openebs/jiva:0.6.0"
               }
            ],
@@ -27,12 +30,12 @@
             {
               "effect": "NoExecute",
               "key": "node.alpha.kubernetes.io/notReady",
-              "operator": "Exists",
+              "operator": "Exists"
             },
             {
               "effect": "NoExecute",
               "key": "node.alpha.kubernetes.io/unreachable",
-              "operator": "Exists",
+              "operator": "Exists"
             },
             {
               "effect": "NoExecute",

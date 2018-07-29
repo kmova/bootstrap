@@ -7,7 +7,8 @@
 ################################################################
 
 pv=$1
-ns=$2
+pvc=`kubectl get pv $pv -o jsonpath="{.spec.claimRef.name}"`
+ns=`kubectl get pv $pv -o jsonpath="{.spec.claimRef.namespace}"`
 
 ################################################################ 
 # STEP: Generate deploy, replicaset and container names from PV#
@@ -32,8 +33,10 @@ r_rs=$(kubectl get rs -o name --namespace $ns | grep $r_dep | cut -d '/' -f 2)
 # the PV in the previous step                                  #  
 ################################################################
 
-sed "s/pvc[^ \"]*/$r_name/g" replica.patch.tpl.yml > replica.patch.yml
-sed "s/pvc[^ \"]*/$c_name/g" controller.patch.tpl.yml > controller.patch.yml
+sed "s/@pvc-name[^ \"]*/$pvc/g" replica.patch.tpl.yml > replica.patch.yml.0
+sed "s/@pvc-name[^ \"]*/$pvc/g" controller.patch.tpl.yml > controller.patch.yml.0
+sed "s/@r_name[^ \"]*/$r_name/g" replica.patch.yml.0 > replica.patch.yml
+sed "s/@c_name[^ \"]*/$c_name/g" controller.patch.yml.0 > controller.patch.yml
 
 ################################################################
 # STEP: Patch OpenEBS volume deployments (controller, replica) #  
@@ -66,5 +69,9 @@ then echo "ERROR: $rc"; exit; fi
 ################################################################
 kubectl delete rs $c_rs --namespace $ns
 kubectl delete rs $r_rs --namespace $ns
+rm replica.patch.yml.0
+rm replica.patch.yml
+rm controller.patch.yml.0
+rm controller.patch.yml
 
 

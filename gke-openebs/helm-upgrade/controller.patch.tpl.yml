@@ -1,25 +1,28 @@
 {
   "metadata": {
      "labels": {
-       "openebs/volume-provisioner": "jiva"
+       "openebs/volume-provisioner": "jiva",
+       "pvce": "@pvc-name"
      }
   },
   "spec": {
      "selector": {
         "matchLabels": {
-           "openebs/volume-provisioner": "jiva"
+           "openebs/volume-provisioner": "jiva",
+           "pvc": "@pvc-name"
         }
      },
      "template": {
         "metadata": {
            "labels": {
-              "openebs/volume-provisioner": "jiva"
+              "openebs/volume-provisioner": "jiva",
+              "pvc": "@pvc-name"
            }
         },
         "spec": {
            "containers":[
               {
-                "name": "pvc-<deploy-hash>-ctrl-con",
+                "name": "@c_name",
                 "image": "openebs/jiva:0.6.0",
                 "env":[
                   {
