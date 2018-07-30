@@ -26,6 +26,9 @@
                 "image": "openebs/jiva:0.6.0"
               }
            ],
+          "nodeSelector": {
+              "openebs-pv": "@pv-name"
+          },
           "tolerations": [
             {
               "effect": "NoExecute",
