@@ -7,6 +7,8 @@
 ################################################################
 
 pv=$1
+replica_node_label=$2
+
 pvc=`kubectl get pv $pv -o jsonpath="{.spec.claimRef.name}"`
 ns=`kubectl get pv $pv -o jsonpath="{.spec.claimRef.namespace}"`
 
@@ -35,7 +37,7 @@ r_rs=$(kubectl get rs -o name --namespace $ns | grep $r_dep | cut -d '/' -f 2)
 ################################################################
 
 sed "s/@pvc-name[^ \"]*/$pvc/g" replica.patch.tpl.yml > replica.patch.tpl.yml.0
-sed "s/@pv-name[^ \"]*/$pv/g" replica.patch.tpl.yml.0 > replica.patch.tpl.yml.1
+sed "s/@replica_node_label[^ \"]*/$replica_node_label/g" replica.patch.tpl.yml.0 > replica.patch.tpl.yml.1
 sed "s/@r_name[^ \"]*/$r_name/g" replica.patch.tpl.yml.1 > replica.patch.yml
 
 sed "s/@pvc-name[^ \"]*/$pvc/g" controller.patch.tpl.yml > controller.patch.tpl.yml.0
@@ -53,6 +55,8 @@ sed "s/@rep_count[^ \"]*/$rep_count/g" controller.patch.tpl.yml.1 > controller.p
 kubectl patch deployment --namespace $ns $r_dep -p "$(cat replica.patch.yml)"
 rc=$?; if [ $rc -ne 0 ]; then echo "ERROR: $rc"; exit; fi
 
+kubectl delete rs $r_rs --namespace $ns
+
 rollout_status=$(kubectl rollout status --namespace $ns deployment/$r_dep)
 rc=$?; if [[ ($rc -ne 0) || !($rollout_status =~ "successfully rolled out") ]];
 then echo "ERROR: $rc"; exit; fi
@@ -60,6 +64,8 @@ then echo "ERROR: $rc"; exit; fi
 #### PATCH CONTROLLER DEPLOYMENT ####
 kubectl patch deployment  --namespace $ns $c_dep -p "$(cat controller.patch.yml)"
 rc=$?; if [ $rc -ne 0 ]; then echo "ERROR: $rc"; exit; fi
+
+kubectl delete rs $c_rs --namespace $ns
 
 rollout_status=$(kubectl rollout status --namespace $ns  deployment/$c_dep)
 rc=$?; if [[ ($rc -ne 0) || !($rollout_status =~ "successfully rolled out") ]];
@@ -71,8 +77,6 @@ then echo "ERROR: $rc"; exit; fi
 # NOTES: This step is applicable upon label selector updates,  #
 # where the deployment creates orphaned replicasets            #
 ################################################################
-kubectl delete rs $c_rs --namespace $ns
-kubectl delete rs $r_rs --namespace $ns
 rm replica.patch.tpl.yml.0
 rm replica.patch.tpl.yml.1
 rm replica.patch.yml
