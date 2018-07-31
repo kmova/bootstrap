@@ -21,6 +21,7 @@ ns=`kubectl get pv $pv -o jsonpath="{.spec.claimRef.namespace}"`
 
 c_dep=$(echo $pv-ctrl); c_name=$(echo $c_dep-con)
 r_dep=$(echo $pv-rep); r_name=$(echo $r_dep-con)
+rep_count=`kubectl get deploy $r_dep --namespace $ns -o jsonpath="{.spec.replicas}"`
 
 c_rs=$(kubectl get rs -o name --namespace $ns | grep $c_dep | cut -d '/' -f 2)
 r_rs=$(kubectl get rs -o name --namespace $ns | grep $r_dep | cut -d '/' -f 2)
@@ -38,7 +39,8 @@ sed "s/@pv-name[^ \"]*/$pv/g" replica.patch.tpl.yml.0 > replica.patch.tpl.yml.1
 sed "s/@r_name[^ \"]*/$r_name/g" replica.patch.tpl.yml.1 > replica.patch.yml
 
 sed "s/@pvc-name[^ \"]*/$pvc/g" controller.patch.tpl.yml > controller.patch.tpl.yml.0
-sed "s/@c_name[^ \"]*/$c_name/g" controller.patch.tpl.yml.0 > controller.patch.yml
+sed "s/@c_name[^ \"]*/$c_name/g" controller.patch.tpl.yml.0 > controller.patch.tpl.yml.1
+sed "s/@rep_count[^ \"]*/$rep_count/g" controller.patch.tpl.yml.1 > controller.patch.yml
 
 ################################################################
 # STEP: Patch OpenEBS volume deployments (controller, replica) #  
@@ -75,6 +77,7 @@ rm replica.patch.tpl.yml.0
 rm replica.patch.tpl.yml.1
 rm replica.patch.yml
 rm controller.patch.tpl.yml.0
+rm controller.patch.tpl.yml.1
 rm controller.patch.yml
 
 
