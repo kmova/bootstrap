@@ -1,0 +1,63 @@
+{
+  "spec": {
+     "template": {
+        "spec": {
+          "nodeSelector": {
+              "kubernetes.io/hostname": "gke-kmova-helm-default-pool-7df18b80-f98n"
+          },
+          "tolerations": [
+            {
+              "effect": "NoExecute",
+              "key": "node.alpha.kubernetes.io/notReady",
+              "operator": "Exists"
+            },
+            {
+              "effect": "NoExecute",
+              "key": "node.alpha.kubernetes.io/unreachable",
+              "operator": "Exists"
+            },
+            {
+              "effect": "NoExecute",
+              "key": "node.kubernetes.io/not-ready",
+              "operator": "Exists"
+            },
+            {
+              "effect": "NoExecute",
+              "key": "node.kubernetes.io/unreachable",
+              "operator": "Exists"
+            },
+            {
+              "effect": "NoExecute",
+              "key": "node.kubernetes.io/out-of-disk",
+              "operator": "Exists"
+            },
+            {
+              "effect": "NoExecute",
+              "key": "node.kubernetes.io/memory-pressure",
+              "operator": "Exists"
+            },
+            {
+              "effect": "NoExecute",
+              "key": "node.kubernetes.io/disk-pressure",
+              "operator": "Exists"
+            },
+            {
+              "effect": "NoExecute",
+              "key": "node.kubernetes.io/network-unavailable",
+              "operator": "Exists"
+            },
+            {
+              "effect": "NoExecute",
+              "key": "node.kubernetes.io/unschedulable",
+              "operator": "Exists"
+            },
+            {
+              "effect": "NoExecute",
+              "key": "node.cloudprovider.kubernetes.io/uninitialized",
+              "operator": "Exists"
+            }
+          ]
+        }
+     }
+  }
+} 
