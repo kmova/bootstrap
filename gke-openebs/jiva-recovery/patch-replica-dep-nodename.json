@@ -3,7 +3,7 @@
      "template": {
         "spec": {
           "nodeSelector": {
-              "kubernetes.io/hostname": "gke-kmova-helm-default-pool-7df18b80-f98n"
+              "kubernetes.io/hostname": "_replica-hostname_"
           },
           "tolerations": [
             {
