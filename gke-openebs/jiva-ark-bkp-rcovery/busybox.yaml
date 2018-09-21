@@ -5,6 +5,8 @@ metadata:
   namespace: default
   labels:
     app: test-ark-backup
+  annotations:
+     backup.ark.heptio.com/backup-volumes: demo-vol1
 spec:
   containers:
   - command:
@@ -16,6 +18,7 @@ spec:
     name: busybox
     volumeMounts:
     - mountPath: /mnt/store1
+      mountPropagation: Bidirectional
       name: demo-vol1
   volumes:
   - name: demo-vol1
