@@ -1,0 +1,12 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: demo-vol1-recover-claim
+spec:
+  storageClassName: openebs-jiva-gpd-ns
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5G

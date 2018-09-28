@@ -1,0 +1,16 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-jiva-gpd-ns
+  annotations:
+    openebs.io/cas-type: jiva
+    cas.openebs.io/config: |
+      - name: StoragePool
+        value: "jiva-gpd-pool"
+      - name: ReplicaCount
+        value: "1"
+      - name: ReplicaNodeSelector
+        value: |-
+            kubernetes.io/hostname: gke-kmova-helm-default-pool-bb33fbc7-tj3t
+provisioner: openebs.io/provisioner-iscsi
