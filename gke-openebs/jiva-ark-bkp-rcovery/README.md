@@ -23,6 +23,8 @@ in the restic daemonset pod on the same node. Possibly due to k8s version (1.9.7
 issue with mount propogation?
 
 Workaround: delete the restic pod. After it restarts, the data is visible.
+
+
 ```
 
 ```
@@ -59,7 +61,8 @@ ark restore describe rbb-01 --volume-details
 ```
 Issue 2: The restored data is available within in the hostdir of the restic pod.
 However it is not visible on the host or in the restored pod. Similar to the issue 
-above.  
+above. 
+(Ref: https://github.com/heptio/ark/issues/669)
 
 Workaround: Copy the contents from the downloaded dir in restic pod, to the scratch 
 folder. And the move the contents along with .ark folder into the 
