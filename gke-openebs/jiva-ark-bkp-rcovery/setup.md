@@ -103,6 +103,8 @@ Go to the checked out ark repo on the development host.
 ```
 kubectl apply -f examples/common/00-prereqs.yaml
 
+#set the SERVICE_ACCOUNT_EMAIL and PROJECT_ID
+# using steps above
 gcloud iam service-accounts keys create credentials-ark \
  --iam-account $SERVICE_ACCOUNT_EMAIL
 

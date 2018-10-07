@@ -18,7 +18,6 @@ spec:
     name: busybox
     volumeMounts:
     - mountPath: /mnt/store1
-      mountPropagation: Bidirectional
       name: demo-vol1
   volumes:
   - name: demo-vol1

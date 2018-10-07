@@ -10,7 +10,7 @@ kubectl apply -f https://openebs.github.io/charts/openebs-operator-0.7.0.yaml
 kubectl apply -f busybox.yaml
 
 #Write some data into /mnt/store1
-kubectl exec -it busybox /bin/bash
+kubectl exec -it busybox /bin/sh
 
 kubectl get pods -l app=test-ark-backup
 ```
@@ -18,13 +18,17 @@ kubectl get pods -l app=test-ark-backup
 ### Backup 
 
 ```
-Issue 1: It appears that the data written from the pods is not visible
-in the restic daemonset pod on the same node. Possibly due to k8s version (1.9.7)
-issue with mount propogation?
+#Login to restic pod on the node where busy box is running
+#Check data is visible in the following directory:
+# /host_pods/<busybox-pod-id>/volumes/kubernetes.io~iscsi/<pod-name>
+```
+
+```
+Issue 1: If using K8s 1.10.7 or earlier, the data written from the pods
+will not visible in the restic daemonset pod on the same node. This
+feature requires - mount-propogration feature to be enabled in k8s. 
 
 Workaround: delete the restic pod. After it restarts, the data is visible.
-
-
 ```
 
 ```
@@ -59,14 +63,14 @@ ark restore describe rbb-01 --volume-details
 ```
 
 ```
-Issue 2: The restored data is available within in the hostdir of the restic pod.
-However it is not visible on the host or in the restored pod. Similar to the issue 
-above. 
+Issue 2: If using k8s versions prior 1.10.7, the restor command
+fetches the data into hostdir, but will not be visible under the 
+busybox pod. 
 (Ref: https://github.com/heptio/ark/issues/669)
 
-Workaround: Copy the contents from the downloaded dir in restic pod, to the scratch 
-folder. And the move the contents along with .ark folder into the 
-/var/lib/kubelet/restore-pod-id/../mount.
+Workaround: Copy the contents from the downloaded dir in restic pod,
+ to the scratch folder. And the move the contents along with .ark 
+folder into the /var/lib/kubelet/restore-pod-id/../mount.
 ```
 
 
