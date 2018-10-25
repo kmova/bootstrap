@@ -73,4 +73,9 @@ Workaround: Copy the contents from the downloaded dir in restic pod,
 folder into the /var/lib/kubelet/restore-pod-id/../mount.
 ```
 
+### Scheduled Backup
 
+```
+ark schedule create bbb-hourly --schedule "0 * * * *" -l app=test-ark-backup
+ark backup get
+```
