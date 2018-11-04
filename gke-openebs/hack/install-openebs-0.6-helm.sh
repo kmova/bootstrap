@@ -1,5 +1,5 @@
 
-helm install  --namespace openebs --name ut stable/openebs
+helm install --namespace openebs --name ut --version "0.6.1" stable/openebs
 sleep 20
 kubectl get pods -n openebs
 sleep 5
