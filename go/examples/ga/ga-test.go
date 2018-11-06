@@ -14,19 +14,20 @@ func fireEvent( cid, ds, aid string,
 	}
 
 	//client.ClientID("20eacc6c-e109-11e8-9f32-f2801f1b9fd1")
-	client.ClientID( cid )
-	client.DataSource( ds )
-	client.ApplicationInstallerID( aid )
+	client.ClientID(cid).
+		DataSource(ds).
+		ApplicationInstallerID( aid ).
+		ApplicationID(ai).
+		ApplicationVersion(av)
 
-	client.ApplicationID(ai)
-	client.ApplicationVersion(av)
 
+	client.ApplicationName(eSubType).
+		DocumentTitle(eId)
 
-	client.ApplicationName(eSubType)
-	client.DocumentTitle(eId)
 	event := ga.NewEvent(eType, eState)
-	event.Label( eLabel )
-	event.Value( eVal )
+	event.
+		Label(eLabel).
+		Value(eVal)
 
 
 	err = client.Send(event)
