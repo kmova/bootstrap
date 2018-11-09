@@ -13,7 +13,7 @@ spec:
         command: 
         - sh
         - -c
-        - 'date > /mnt/replica/date.txt; sync; sleep 5; sync;'
+        - 'rm -rf /mnt/replica/*; sync; sleep 5;date > /mnt/replica/scrubbed.txt; sync; sleep 5; sync;'
         volumeMounts:
         - mountPath: /mnt/replica
           name: replica-path
