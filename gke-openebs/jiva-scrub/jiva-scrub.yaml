@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sjr-0b17b7ca-dff8-11e8-81d0-42010a800141
+spec:
+  template:
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: gke-kmova-helm-default-pool-23b09a88-13ln
+      containers:
+      - name: sjr
+        image: quay.io/openebs/openebs-tools:3.8
+        command: 
+        - sh
+        - -c
+        - 'date > /mnt/replica/date.txt; sync; sleep 5; sync;'
+        volumeMounts:
+        - mountPath: /mnt/replica
+          name: replica-path
+      volumes:
+      - name: replica-path
+        hostPath:
+          path: /var/openebs/pvc-0b17b7ca-dff8-11e8-81d0-42010a800141
+          type: ""
+      restartPolicy: Never
+  backoffLimit: 4
