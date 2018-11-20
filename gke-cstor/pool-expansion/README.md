@@ -1,6 +1,4 @@
 
-
-
 This document provides CLI commands for expanding a cStor pool with additional disks. These steps apply to cStor Pools provisioned in 0.7 or 0.8. Pool expansion feature is planned for OpenEBS 0.9.
 
 A single SPC can result in one or more cStor pools depending on the disks provided to SPC spec. A cStor Pool comprises of
@@ -8,7 +6,7 @@ A single SPC can result in one or more cStor pools depending on the disks provid
 - cStor Storage Pool CR (CSP) - used for specifying the unique disk path used by the pool.
 - cStor Storage Pool Deployment and associated Pod. 
 
-When the SPC spec is create with a set of disks, the cstor-operator will segregate the disks based on the node. And on each node, a cStor Pool will be created using the disks from that node. Once cStor Pools are provisioned, the cstor-operator will have to monitor for the updates to the SPC spec and check for any new disks provided. If a new disk is provided, it has to identify the node and pool and add the disk to that pool. 
+When the SPC spec is created with a set of disks, the cstor-operator will segregate the disks based on the node. And on each node, a cStor Pool will be created using the disks from that node. Once cStor Pools are provisioned, the cstor-operator will have to monitor for the updates to the SPC spec and check for any new disks provided. If a new disk is provided, it has to identify the node and pool and add the disk to that pool. 
 
 The following steps are per cStor Storage Pool and will need to be repeated on each of the cStor Pools corresponding to an SPC. 
 
@@ -19,7 +17,7 @@ Step 1: Identify the cStor Pool (CSP) and Storage Pool (SP) associated with the 
 
   `kubectl get sp -l openebs.io/storage-pool-claim=cstor-disk --show-labels`
 
-  Storge Pools sample output:
+  Storage Pools sample output:
   ```
   NAME              AGE       LABELS
   cstor-disk-i4xj   53m       kubernetes.io/hostname=gke-kmova-helm-default-pool-2c01cdf6-9mxq,openebs.io/cas-type=cstor,openebs.io/cstor-pool=cstor-disk-i4xj,openebs.io/storage-pool-claim=cstor-disk
@@ -46,7 +44,7 @@ Step 2: Identify the new disk that that need to be attached to the cStor Pool.
   The following command can be used to see the disks already used on the node - gke-kmova-helm-default-pool-2c01cdf6-dxbf
   `kubectl get sp -l kubernetes.io/hostname=gke-kmova-helm-default-pool-2c01cdf6-dxbf -o jsonpath="{range .items[*]}{@.spec.disks.diskList};{end}" | tr ";" "\n"`
 
-  Sample Ouptut:
+  Sample Output:
   ```
   [disk-b407e5862d253e666636f2fe5a01355d]
   [sparse-ed5a5183d2dba23782d641df61a1d869]`
@@ -89,20 +87,24 @@ Step 5: Expand the pool.
   `kubectl get pods -n openebs | grep cstor-disk-vt1u`
 
   Sample Output:
+
   ```
-  cstor-disk-vt1u-65b659d574-8f6fp            2/2       Running   0          1h        10.44.1.8    gke-kmova-helm-default-pool-2c01cdf6-dxbf  ```
+  cstor-disk-vt1u-65b659d574-8f6fp            2/2       Running   0          1h        10.44.1.8    gke-kmova-helm-default-pool-2c01cdf6-dxbf
+  ```
 
   Check the pool name: `kubectl exec -it -n openebs cstor-disk-vt1u-65b659d574-8f6fp -- zpool list`
 
   Sample Output:
+
   ```
   NAME                                         SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT
   cstor-deaf87e6-ec78-11e8-893b-42010a80003a   496G   202K   496G         -     0%     0%  1.00x  ONLINE  -
   ```
 
-  Extract the pool name from above ouput. In this case - cstor-deaf87e6-ec78-11e8-893b-42010a80003a
+  Extract the pool name from above output. In this case - cstor-deaf87e6-ec78-11e8-893b-42010a80003a
 
   Expand the pool with additional disk. 
+
   `kubectl exec -it -n openebs cstor-disk-vt1u-65b659d574-8f6fp -- zpool add cstor-deaf87e6-ec78-11e8-893b-42010a80003a /dev/disk/by-id/scsi-0Google_PersistentDisk_kmova-n2-d1`
 
 
@@ -110,6 +112,7 @@ Step 5: Expand the pool.
   `kubectl exec -it -n openebs cstor-disk-vt1u-65b659d574-8f6fp -- zpool list`
 
   Sample Output:
+
   ```
   NAME                                         SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT
   cstor-deaf87e6-ec78-11e8-893b-42010a80003a   992G   124K   992G         -     0%     0%  1.00x  ONLINE  -
