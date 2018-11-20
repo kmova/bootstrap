@@ -1,17 +1,13 @@
+This document provides CLI commands for expanding a cStor pool (type=striped) with additional disks. 
 
-This document provides CLI commands for expanding a cStor pool with additional disks. These steps apply to cStor Pools provisioned in 0.7 or 0.8. Pool expansion feature is planned for OpenEBS 0.9.
-
-A single SPC can result in one or more cStor pools depending on the disks provided to SPC spec. A cStor Pool comprises of
+An SPC can result in one or more cStor pools depending on the disks provided to SPC spec. A cStor Pool comprises of:
 - Storage Pool CR (SP) - used for specifying the Disk CRs used by the pool.
 - cStor Storage Pool CR (CSP) - used for specifying the unique disk path used by the pool.
 - cStor Storage Pool Deployment and associated Pod. 
 
-When the SPC spec is created with a set of disks, the cstor-operator will segregate the disks based on the node. And on each node, a cStor Pool will be created using the disks from that node. Once cStor Pools are provisioned, the cstor-operator will have to monitor for the updates to the SPC spec and check for any new disks provided. If a new disk is provided, it has to identify the node and pool and add the disk to that pool. 
+When the SPC spec is created with a set of disks, the cstor-operator will segregate the disks based on the node. And on each node, a cStor Pool will be created using the disks from that node. After the pool is provisioned, it can be expanded only by the disks already discovered on the same node. 
 
-The following steps are per cStor Storage Pool and will need to be repeated on each of the cStor Pools corresponding to an SPC. 
-
-
-A Pool can be expanded only by the disks already discovered on the same node. 
+The following steps are for expanding a single cStor Storage Pool and will need to be repeated on each of the cStor Pools corresponding to an SPC. 
 
 ### Step 1: Identify the cStor Pool (CSP) and Storage Pool (SP) associated with the SPC. 
 
@@ -42,7 +38,9 @@ A Pool can be expanded only by the disks already discovered on the same node.
   ```
 
   The following command can be used to see the disks already used on the node - gke-kmova-helm-default-pool-2c01cdf6-dxbf
-  `kubectl get sp -l kubernetes.io/hostname=gke-kmova-helm-default-pool-2c01cdf6-dxbf -o jsonpath="{range .items[*]}{@.spec.disks.diskList};{end}" | tr ";" "\n"`
+  ```
+  kubectl get sp -l kubernetes.io/hostname=gke-kmova-helm-default-pool-2c01cdf6-dxbf -o jsonpath="{range .items[*]}{@.spec.disks.diskList};{end}" | tr ";" "\n"
+ ```
 
   Sample Output:
   ```
@@ -55,7 +53,9 @@ A Pool can be expanded only by the disks already discovered on the same node.
 ### Step 3: Patch CSP with the disk path details
   Get the disk path listed by unique path under devLinks. 
 
-  `kubectl get disk disk-ffca7a8731976830057238c5dc25e94c -o jsonpath="{range .spec.devlinks[0]}{@.links[0]};{end}" | tr ";" "\n"`
+  ```
+  kubectl get disk disk-ffca7a8731976830057238c5dc25e94c -o jsonpath="{range .spec.devlinks[0]}{@.links[0]};{end}" | tr ";" "\n"
+  ```
  
   Sample Output:
   ```
@@ -73,6 +73,7 @@ A Pool can be expanded only by the disks already discovered on the same node.
 ### Step 4: Patch SP with disk name
 
   The following command patches the SP (cstor-disk-vt1u) with disk (disk-ffca7a8731976830057238c5dc25e94c)
+
   ```
   kubectl patch sp cstor-disk-vt1u --type json -p '[{ "op": "add", "path": "/spec/disks/diskList/-", "value": "disk-ffca7a8731976830057238c5dc25e94c" }]'
   ```
@@ -105,7 +106,9 @@ A Pool can be expanded only by the disks already discovered on the same node.
 
   Expand the pool with additional disk. 
 
-  `kubectl exec -it -n openebs cstor-disk-vt1u-65b659d574-8f6fp -- zpool add cstor-deaf87e6-ec78-11e8-893b-42010a80003a /dev/disk/by-id/scsi-0Google_PersistentDisk_kmova-n2-d1`
+  ```
+  kubectl exec -it -n openebs cstor-disk-vt1u-65b659d574-8f6fp -- zpool add cstor-deaf87e6-ec78-11e8-893b-42010a80003a /dev/disk/by-id/scsi-0Google_PersistentDisk_kmova-n2-d1
+   ```
 
 
   You can execute the list command again to see the increase in capacity. 
@@ -117,4 +120,3 @@ A Pool can be expanded only by the disks already discovered on the same node.
   NAME                                         SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT
   cstor-deaf87e6-ec78-11e8-893b-42010a80003a   992G   124K   992G         -     0%     0%  1.00x  ONLINE  -
   ```
-
