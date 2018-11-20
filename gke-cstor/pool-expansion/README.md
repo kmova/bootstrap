@@ -13,7 +13,7 @@ The following steps are per cStor Storage Pool and will need to be repeated on e
 
 A Pool can be expanded only by the disks already discovered on the same node. 
 
-###Step 1: Identify the cStor Pool (CSP) and Storage Pool (SP) associated with the SPC. 
+### Step 1: Identify the cStor Pool (CSP) and Storage Pool (SP) associated with the SPC. 
 
   `kubectl get sp -l openebs.io/storage-pool-claim=cstor-disk --show-labels`
 
@@ -28,7 +28,7 @@ A Pool can be expanded only by the disks already discovered on the same node.
   From the above list, pick up the cStor Pool that needs to be expanded. The name of both CSP and SP will be same. The rest of the steps assume that `cstor-disk-vt1u` needs to be expanded. 
   From the above output, also note down the node on which the Pool is running. In this case the node is `gke-kmova-helm-default-pool-2c01cdf6-dxbf`
 
-###Step 2: Identify the new disk that that need to be attached to the cStor Pool. 
+### Step 2: Identify the new disk that that need to be attached to the cStor Pool. 
 
   The following command can be used to list the disks on a give node. 
   `kubectl get disks -l kubernetes.io/hostname=gke-kmova-helm-default-pool-2c01cdf6-dxbf`
@@ -52,7 +52,7 @@ A Pool can be expanded only by the disks already discovered on the same node.
 
   In this case, `disk-ffca7a8731976830057238c5dc25e94c` is unused. 
 
-###Step 3: Patch CSP with the disk path details
+### Step 3: Patch CSP with the disk path details
   Get the disk path listed by unique path under devLinks. 
 
   `kubectl get disk disk-ffca7a8731976830057238c5dc25e94c -o jsonpath="{range .spec.devlinks[0]}{@.links[0]};{end}" | tr ";" "\n"`
@@ -70,7 +70,7 @@ A Pool can be expanded only by the disks already discovered on the same node.
   Verify that disk is patched by executing `kubectl get csp cstor-disk-vt1u -o yaml` and check that new disk is added under diskList.
 
 
-###Step 4: Patch SP with disk name
+### Step 4: Patch SP with disk name
 
   The following command patches the SP (cstor-disk-vt1u) with disk (disk-ffca7a8731976830057238c5dc25e94c)
   ```
@@ -79,7 +79,7 @@ A Pool can be expanded only by the disks already discovered on the same node.
 
   Verify that disk is patched by executing `kubectl get sp cstor-disk-vt1u -o yaml` and check that new disk is added under diskList.
 
-###Step 5: Expand the pool.
+### Step 5: Expand the pool.
 
   The last step is to update the cstor pool pod (cstor-disk-vt1u) with disk path (/dev/disk/by-id/scsi-0Google_PersistentDisk_kmova-n2-d1)
   
