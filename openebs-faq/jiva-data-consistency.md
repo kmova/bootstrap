@@ -58,6 +58,10 @@ In this case:
 - Say Node-1 finally comes back online, then the Node-1 Replica will be put into WO mode and will sync with Node-2 or Node-3 Replica and will cause data loss. *This is another issue, where we lost the data*
 
 Though very rare, in case of Jiva volumes - when all the Replica's are down - the order in which the replicas are brought back online matters.   
+
+Some of the best practicies w.r.t Jiva Replica Deployments
+- Make the Jiva Replica Deployments pinned to Storage Nodes using a ReplicaNodeSelector Policy.
+- Setup a PodDisruptionBudget on the Jiva Replica Deployment - so that atleast 2 Replica's are online at any given time - helpful in case of K8s Upgrades. 
   
 
 
