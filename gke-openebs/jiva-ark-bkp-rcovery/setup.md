@@ -1,4 +1,4 @@
-# Setup ARC with Restic on GCP
+# Setup ARK (Valero) with Restic on GCP
 
 This document contains quick reference of the installation steps. 
 
