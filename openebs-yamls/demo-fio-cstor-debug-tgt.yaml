@@ -30,7 +30,7 @@ metadata:
     openebs.io/cas-type: cstor
     cas.openebs.io/config: |
       - name: VolumeTargetImage
-        value: "ivishnuvardhan/cstor-istgt:highcpuv1"
+        value: "openebs/cstor-istgt-ci:highcpu-0.8.0-2-g18434e2"
 spec:
   storageClassName: openebs-cstor-sparse
   accessModes:
