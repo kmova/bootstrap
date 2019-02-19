@@ -1,0 +1,16 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: dbgcstor-claim
+  annotations:
+    openebs.io/cas-type: cstor
+    cas.openebs.io/config: |
+      - name: VolumeTargetImage
+        value: "ivishnuvardhan/cstor-istgt:highcpuv1"
+spec:
+  storageClassName: openebs-cstor-sparse
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "4G"
