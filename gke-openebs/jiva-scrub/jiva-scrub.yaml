@@ -5,8 +5,9 @@ metadata:
 spec:
   template:
     spec:
+      ttlSecondsAfterFinished: 100
       nodeSelector:
-        kubernetes.io/hostname: gke-kmova-helm-default-pool-23b09a88-13ln
+        kubernetes.io/hostname: gke-kmova-helm-default-pool-0a79c577-4p10
       containers:
       - name: sjr
         image: quay.io/openebs/openebs-tools:3.8
