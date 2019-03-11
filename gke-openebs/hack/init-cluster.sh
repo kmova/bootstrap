@@ -22,4 +22,4 @@ gcloud container clusters get-credentials kmova-helm \
 gcloud info | grep Account
 kubectl create clusterrolebinding kmova-helm-admin-binding \
  --clusterrole=cluster-admin \
- --user=kiran.mova@cloudbyteinc.com
+ --user=kiran.mova@mayadata.io
