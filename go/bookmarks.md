@@ -20,3 +20,8 @@ Other links:
 - [Go Best-Practices/Tips Peter Bourgon - 2016](https://peter.bourgon.org/go-best-practices-2016/)
 - [Glide](https://github.com/Masterminds/glide)
 - [Go Package Vendor -- anti pattern](https://github.com/mattfarina/golang-broken-vendor)
+
+
+Profiling:
+- http://rodrigodumont.com/2017/11/10/profile-go-micro-services-in-kubernetes-with-pprof/
+
