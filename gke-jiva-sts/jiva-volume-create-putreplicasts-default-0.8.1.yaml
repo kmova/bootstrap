@@ -1,0 +1,153 @@
+apiVersion: openebs.io/v1alpha1
+kind: RunTask
+metadata:
+  labels:
+    version: 0.8.1
+  name: jiva-volume-create-putreplicasts-default-0.8.1
+  namespace: openebs
+spec:
+  meta: |
+    id: createputrep
+    runNamespace: {{ .Volume.runNamespace }}
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    action: put
+  post: |
+    {{- jsonpath .JsonResult "{.metadata.name}" | trim | saveAs "createputrep.objectName" .TaskResult | noop -}}
+  task: |-
+    {{- $isEvictionTolerations := .Config.EvictionTolerations.value | default "none" -}}
+    {{- $evictionTolerationsVal := fromYaml .Config.EvictionTolerations.value -}}
+    {{- $isCloneEnable := .Volume.isCloneEnable | default "false" -}}
+    {{- $setResourceRequests := .Config.ReplicaResourceRequests.value | default "none" -}}
+    {{- $resourceRequestsVal := fromYaml .Config.ReplicaResourceRequests.value -}}
+    {{- $setResourceLimits := .Config.ReplicaResourceLimits.value | default "none" -}}
+    {{- $resourceLimitsVal := fromYaml .Config.ReplicaResourceLimits.value -}}
+    {{- $replicaAntiAffinityVal := .TaskResult.creategetpvc.replicaAntiAffinity -}}
+    {{- $hasNodeSelector := .Config.ReplicaNodeSelector.value | default "none" -}}
+    {{- $nodeSelectorVal := fromYaml .Config.ReplicaNodeSelector.value -}}
+    {{- $hasReplicaToleration := .Config.ReplicaTolerations.value | default "none" -}}
+    {{- $replicaTolerationVal := fromYaml .Config.ReplicaTolerations.value -}}
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    metadata:
+      labels:
+        openebs.io/storage-engine-type: jiva
+        openebs.io/cas-type: jiva
+        openebs.io/replica: jiva-replica
+        openebs.io/persistent-volume: {{ .Volume.owner }}
+        openebs.io/persistent-volume-claim: {{ .Volume.pvc }}
+        openebs.io/version: {{ .CAST.version }}
+        openebs.io/cas-template-name: {{ .CAST.castName }}
+      annotations:
+        openebs.io/capacity: {{ .Volume.capacity }}
+        openebs.io/storage-pool: {{ .Config.StoragePool.value }}
+      name: {{ .Volume.owner }}-rep
+    spec:
+      replicas: {{ .Config.ReplicaCount.value }}
+      strategy:
+        type: Recreate
+      selector:
+        matchLabels:
+          openebs.io/replica: jiva-replica
+          openebs.io/persistent-volume: {{ .Volume.owner }}
+      template:
+        metadata:
+          labels:
+            openebs.io/replica: jiva-replica
+            openebs.io/persistent-volume: {{ .Volume.owner }}
+            openebs.io/persistent-volume-claim: {{ .Volume.pvc }}
+            {{- if ne $replicaAntiAffinityVal "none" }}
+            openebs.io/replica-anti-affinity: {{ $replicaAntiAffinityVal }}
+            {{- end }}
+          annotations:
+            openebs.io/capacity: {{ .Volume.capacity }}
+            openebs.io/storage-pool: {{ .Config.StoragePool.value }}
+        spec:
+          {{- if ne $hasNodeSelector "none" }}
+          nodeSelector:
+            {{- range $sK, $sV := $nodeSelectorVal }}
+              {{ $sK }}: {{ $sV }}
+            {{- end }}
+          {{- end}}
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    openebs.io/replica: jiva-replica
+                    {{/* If PVC object has a replica anti-affinity value. Use it.
+                         This is usually the case for STS that creates PVCs from a
+                         PVC Template. So, a STS can have multiple PVs with their
+                         unique id. To schedule/spread out replicas belonging to
+                         different PV, a unique label associated with the STS should
+                         be passed to all the PVCs tied to the STS. */}}
+                    {{- if ne $replicaAntiAffinityVal "none" }}
+                    openebs.io/replica-anti-affinity: {{ $replicaAntiAffinityVal }}
+                    {{- else }}
+                    openebs.io/persistent-volume: {{ .Volume.owner }}
+                    {{- end }}
+                topologyKey: {{ .Config.ReplicaAntiAffinityTopoKey.value }}
+          containers:
+          - args:
+            - replica
+            - --frontendIP
+            - {{ .TaskResult.createputsvc.clusterIP }}
+            {{- if ne $isCloneEnable "false" }}
+            - --cloneIP
+            - {{ .Volume.sourceVolumeTargetIP }}
+            - --type
+            - "clone"
+            - --snapName
+            - {{ .Volume.snapshotName }}
+            {{- end }}
+            - --size
+            - {{ .Volume.capacity }}
+            - /openebs
+            command:
+            - launch
+            image: {{ .Config.ReplicaImage.value }}
+            name: {{ .Volume.owner }}-rep-con
+            resources:
+              {{- if ne $setResourceLimits "none" }}
+              limits:
+              {{- range $rKey, $rLimit := $resourceLimitsVal }}
+                {{ $rKey }}: {{ $rLimit }}
+              {{- end }}
+              {{- end }}
+              {{- if ne $setResourceRequests "none" }}
+              requests:
+              {{- range $rKey, $rReq := $resourceRequestsVal }}
+                {{ $rKey }}: {{ $rReq }}
+              {{- end }}
+              {{- end }}
+            ports:
+            - containerPort: 9502
+              protocol: TCP
+            - containerPort: 9503
+              protocol: TCP
+            - containerPort: 9504
+              protocol: TCP
+            volumeMounts:
+            - name: openebs
+              mountPath: /openebs
+          tolerations:
+          {{- if ne $isEvictionTolerations "none" }}
+          {{- range $k, $v := $evictionTolerationsVal }}
+          -
+          {{- range $kk, $vv := $v }}
+            {{ $kk }}: {{ $vv }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- if ne $hasReplicaToleration "none" }}
+          {{- range $k, $v := $replicaTolerationVal }}
+          -
+          {{- range $kk, $vv := $v }}
+            {{ $kk }}: {{ $vv }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          volumes:
+          - name: openebs
+            hostPath:
+              path: {{ .TaskResult.creategetpath.storagePoolPath }}/{{ .Volume.owner }}

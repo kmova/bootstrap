@@ -1,0 +1,12 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    cas.openebs.io/config: |
+      - name: ReplicaCount
+        value: "3"
+      - name: StoragePool
+        value: default
+    openebs.io/cas-type: jiva
+  name: openebs-jiva-sts
+provisioner: openebs.io/provisioner-iscsi

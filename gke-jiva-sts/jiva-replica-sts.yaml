@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    openebs.io/capacity: 4G
+    openebs.io/storage-pool: default
+  labels:
+    openebs.io/cas-template-name: jiva-volume-create-default-0.8.1
+    openebs.io/cas-type: jiva
+    openebs.io/persistent-volume: pvc-33056346-44ce-11e9-b068-42010a80005c
+    openebs.io/persistent-volume-claim: jiva-vol1-1r-claim
+    openebs.io/replica: jiva-replica
+    openebs.io/storage-engine-type: jiva
+    openebs.io/version: 0.8.1
+  name: pvc-33056346-44ce-11e9-b068-42010a80005c-rep-sts
+  namespace: default
+spec:
+  replicas: 3
+  serviceName: ""
+  selector:
+    matchLabels:
+      openebs.io/persistent-volume: pvc-33056346-44ce-11e9-b068-42010a80005c
+      openebs.io/replica: jiva-replica
+  template:
+    metadata:
+      annotations:
+        openebs.io/capacity: 4G
+        openebs.io/storage-pool: default
+      labels:
+        openebs.io/persistent-volume: pvc-33056346-44ce-11e9-b068-42010a80005c
+        openebs.io/persistent-volume-claim: jiva-vol1-1r-claim
+        openebs.io/replica: jiva-replica
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                openebs.io/persistent-volume: pvc-33056346-44ce-11e9-b068-42010a80005c
+                openebs.io/replica: jiva-replica
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - args:
+        - replica
+        - --frontendIP
+        - 10.47.240.63
+        - --size
+        - 4G
+        - /openebs
+        command:
+        - launch
+        image: quay.io/openebs/jiva:0.8.1
+        imagePullPolicy: IfNotPresent
+        name: pvc-33056346-44ce-11e9-b068-42010a80005c-rep-con
+        ports:
+        - containerPort: 9502
+          protocol: TCP
+        - containerPort: 9503
+          protocol: TCP
+        - containerPort: 9504
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /openebs
+          name: lpv
+      terminationGracePeriodSeconds: 30
+      tolerations:
+      - effect: NoExecute
+        key: node.alpha.kubernetes.io/notReady
+        operator: Exists
+      - effect: NoExecute
+        key: node.cloudprovider.kubernetes.io/uninitialized
+        operator: Exists
+      - effect: NoExecute
+        key: node.alpha.kubernetes.io/unreachable
+        operator: Exists
+      - effect: NoExecute
+        key: node.kubernetes.io/not-ready
+        operator: Exists
+      - effect: NoExecute
+        key: node.kubernetes.io/unreachable
+        operator: Exists
+      - effect: NoExecute
+        key: node.kubernetes.io/out-of-disk
+        operator: Exists
+      - effect: NoExecute
+        key: node.kubernetes.io/memory-pressure
+        operator: Exists
+      - effect: NoExecute
+        key: node.kubernetes.io/disk-pressure
+        operator: Exists
+      - effect: NoExecute
+        key: node.kubernetes.io/network-unavailable
+        operator: Exists
+      - effect: NoExecute
+        key: node.kubernetes.io/unschedulable
+        operator: Exists
+  volumeClaimTemplates:
+  - metadata:
+      name: lpv
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      storageClassName: jiva-replica-localpv
+      resources:
+        requests:
+          storage: 4G

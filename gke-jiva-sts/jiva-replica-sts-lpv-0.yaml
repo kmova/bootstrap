@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: lpv-pvc-33056346-44ce-11e9-b068-42010a80005c-rep-sts-0
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: jiva-replica-localpv
+  local:
+    path: /var/openebs/lpv-33056346-44ce-11e9-b068-42010a80005c
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - gke-kmova-helm-default-pool-5fe6f332-mf8n

@@ -1,0 +1,114 @@
+apiVersion: openebs.io/v1alpha1
+kind: CASTemplate
+metadata:
+  labels:
+    castName: jiva-volume-create-sts-0.8.1
+    kubeVersion: v1.11.7-gke.4
+    version: 0.8.1
+  name: jiva-volume-create-sts-0.8.1
+spec:
+  defaultConfig:
+  - name: ControllerImage
+    value: quay.io/openebs/jiva:0.8.1
+  - name: ReplicaImage
+    value: quay.io/openebs/jiva:0.8.1
+  - name: VolumeMonitorImage
+    value: quay.io/openebs/m-exporter:0.8.1
+  - name: ReplicaCount
+    value: "3"
+  - name: StoragePool
+    value: default
+  - enabled: "true"
+    name: VolumeMonitor
+  - name: TargetTolerations
+    value: none
+  - name: ReplicaTolerations
+    value: none
+  - name: EvictionTolerations
+    value: |-
+      t1:
+        effect: NoExecute
+        key: node.alpha.kubernetes.io/notReady
+        operator: Exists
+      t2:
+        effect: NoExecute
+        key: node.alpha.kubernetes.io/unreachable
+        operator: Exists
+      t3:
+        effect: NoExecute
+        key: node.kubernetes.io/not-ready
+        operator: Exists
+      t4:
+        effect: NoExecute
+        key: node.kubernetes.io/unreachable
+        operator: Exists
+      t5:
+        effect: NoExecute
+        key: node.kubernetes.io/out-of-disk
+        operator: Exists
+      t6:
+        effect: NoExecute
+        key: node.kubernetes.io/memory-pressure
+        operator: Exists
+      t7:
+        effect: NoExecute
+        key: node.kubernetes.io/disk-pressure
+        operator: Exists
+      t8:
+        effect: NoExecute
+        key: node.kubernetes.io/network-unavailable
+        operator: Exists
+      t9:
+        effect: NoExecute
+        key: node.kubernetes.io/unschedulable
+        operator: Exists
+      t10:
+        effect: NoExecute
+        key: node.cloudprovider.kubernetes.io/uninitialized
+        operator: Exists
+  - name: NodeAffinityRequiredSchedIgnoredExec
+    value: |-
+      t1:
+        key: beta.kubernetes.io/os
+        operator: In
+        values:
+        - linux
+  - name: NodeAffinityPreferredSchedIgnoredExec
+    value: |-
+      t1:
+        key: some-node-label-key
+        operator: In
+        values:
+        - some-node-label-value
+  - name: TargetResourceRequests
+    value: none
+  - name: TargetResourceLimits
+    value: none
+  - name: ReplicaResourceRequests
+    value: none
+  - name: ReplicaResourceLimits
+    value: none
+  - name: AuxResourceRequests
+    value: none
+  - name: AuxResourceLimits
+    value: none
+  - name: ReplicaAntiAffinityTopoKey
+    value: kubernetes.io/hostname
+  - name: TargetNodeSelector
+    value: none
+  - name: ReplicaNodeSelector
+    value: none
+  - name: FSType
+    value: ext4
+  - name: Lun
+    value: "0"
+  output: jiva-volume-create-output-default-0.8.1
+  run:
+    tasks:
+    - jiva-volume-create-getstorageclass-default-0.8.1
+    - jiva-volume-create-getpvc-default-0.8.1
+    - jiva-volume-create-puttargetservice-default-0.8.1
+    - jiva-volume-create-getstoragepoolcr-default-0.8.1
+    - jiva-volume-create-putreplicasts-default-0.8.1
+    - jiva-volume-create-puttargetdeployment-default-0.8.1
+  taskNamespace: openebs
