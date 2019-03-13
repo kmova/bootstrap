@@ -9,8 +9,8 @@ spec:
   meta: |
     id: createputrep
     runNamespace: {{ .Volume.runNamespace }}
-    apiVersion: extensions/v1beta1
-    kind: Deployment
+    apiVersion: apps/v1
+    kind: StatefulSet
     action: put
   post: |
     {{- jsonpath .JsonResult "{.metadata.name}" | trim | saveAs "createputrep.objectName" .TaskResult | noop -}}
@@ -27,8 +27,8 @@ spec:
     {{- $nodeSelectorVal := fromYaml .Config.ReplicaNodeSelector.value -}}
     {{- $hasReplicaToleration := .Config.ReplicaTolerations.value | default "none" -}}
     {{- $replicaTolerationVal := fromYaml .Config.ReplicaTolerations.value -}}
-    apiVersion: extensions/v1beta1
-    kind: Deployment
+    apiVersion: apps/v1
+    kind: StatefulSet
     metadata:
       labels:
         openebs.io/storage-engine-type: jiva
@@ -44,8 +44,7 @@ spec:
       name: {{ .Volume.owner }}-rep
     spec:
       replicas: {{ .Config.ReplicaCount.value }}
-      strategy:
-        type: Recreate
+      serviceName: ""
       selector:
         matchLabels:
           openebs.io/replica: jiva-replica
@@ -147,7 +146,13 @@ spec:
           {{- end }}
           {{- end }}
           {{- end }}
-          volumes:
-          - name: openebs
-            hostPath:
-              path: {{ .TaskResult.creategetpath.storagePoolPath }}/{{ .Volume.owner }}
+      volumeClaimTemplates:
+      - metadata:
+          name: openebs
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          storageClassName: local-path
+          resources:
+            requests:
+              storage: {{ .Volume.capacity }}

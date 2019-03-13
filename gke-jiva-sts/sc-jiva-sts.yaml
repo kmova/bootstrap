@@ -9,7 +9,8 @@ metadata:
         value: default
     openebs.io/cas-type: jiva-sts
     cas.openebs.io/read-volume-template: jiva-volume-read-default-0.8.1
-    cas.openebs.io/create-volume-template: jiva-volume-create-default-0.8.1
+    cas.openebs.io/create-volume-template: jiva-volume-create-sts-0.8.1
+    #cas.openebs.io/create-volume-template: jiva-volume-create-default-0.8.1
     cas.openebs.io/delete-volume-template: jiva-volume-delete-default-0.8.1
     cas.openebs.io/list-volume-template: jiva-volume-list-default-0.8.1
   name: openebs-jiva-sts
