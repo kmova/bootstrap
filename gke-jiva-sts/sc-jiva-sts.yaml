@@ -4,9 +4,13 @@ metadata:
   annotations:
     cas.openebs.io/config: |
       - name: ReplicaCount
-        value: "3"
+        value: "1"
       - name: StoragePool
         value: default
-    openebs.io/cas-type: jiva
+    openebs.io/cas-type: jiva-sts
+    cas.openebs.io/read-volume-template: jiva-volume-read-default-0.8.1
+    cas.openebs.io/create-volume-template: jiva-volume-create-default-0.8.1
+    cas.openebs.io/delete-volume-template: jiva-volume-delete-default-0.8.1
+    cas.openebs.io/list-volume-template: jiva-volume-list-default-0.8.1
   name: openebs-jiva-sts
 provisioner: openebs.io/provisioner-iscsi

@@ -100,7 +100,7 @@ spec:
     spec:
       accessModes:
       - ReadWriteOnce
-      storageClassName: jiva-replica-localpv
+      storageClassName: local-path
       resources:
         requests:
           storage: 4G

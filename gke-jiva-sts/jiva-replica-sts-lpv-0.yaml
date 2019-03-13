@@ -11,6 +11,7 @@ spec:
   storageClassName: jiva-replica-localpv
   local:
     path: /var/openebs/lpv-33056346-44ce-11e9-b068-42010a80005c
+    type: DirectoryOrCreate
   nodeAffinity:
     required:
       nodeSelectorTerms:

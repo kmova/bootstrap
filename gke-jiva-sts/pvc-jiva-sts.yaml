@@ -1,0 +1,12 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: jiva-sts-claim
+spec:
+  storageClassName: openebs-jiva-sts
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4G
