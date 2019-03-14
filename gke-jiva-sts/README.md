@@ -6,7 +6,6 @@ Notes
   ```
   kubectl apply -f openebs-operator-0.8.2-ci.yaml 
   kubectl apply -f local-path-storage.yaml
-  kubectl create namespace local-path-storage
   ```
 
 - Update CAS templates for creating Jiva Replicas using STS
