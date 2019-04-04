@@ -1,0 +1,13 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: jiva-vol1-retain-claim
+spec:
+  storageClassName: jiva-retain
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4G
+  volumeName: pvc-46387102-567b-11e9-b9b1-42010a800110
