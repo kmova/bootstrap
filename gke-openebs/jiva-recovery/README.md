@@ -1,6 +1,8 @@
-This document contains notes on how to recover data from a backedup jiva replica files. OpenEBS jiva volumes, save the data in /var/openebs/pvc-id/. All the replica's contain identical data. Before performing a cluster re-build, it suffices to have a backup of data from one of the replica's /var/openebs/pvc-id/
+This document contains notes on how to recover data from a backedup jiva replica files. 
 
-These steps are required for OpenEBS 0.5.4 where replicas could get scheduled onto a node where the data doesn't exist.
+OpenEBS jiva volumes, save the data in /var/openebs/pvc-id/. All the replica's contain identical data. 
+
+Before performing a cluster re-build, it suffices to have a backup of data from one of the replica's /var/openebs/pvc-id/
 
 ### Step 1: Run an sample application that generates some data. 
 
