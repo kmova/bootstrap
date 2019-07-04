@@ -6,7 +6,7 @@ metadata:
   labels:
     app: test-ark-backup
   annotations:
-     backup.ark.heptio.com/backup-volumes: demo-vol1
+     backup.velero.io/backup-volumes: demo-vol1
 spec:
   containers:
   - command:
