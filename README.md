@@ -2,4 +2,4 @@
 
 
 # bootstrap
-Respository for bootstraping different projects
+Articles, notes and code examples that have helped me with bootstrapping on various languages, tools, frameworks that I work on or find interesting.
