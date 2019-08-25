@@ -10,6 +10,7 @@ Idiomatic Go:
 - [5 Suggestions - Dave Cheney](https://dave.cheney.net/2014/12/01/five-suggestions-for-setting-up-a-go-project)
 - [Hosting Code with custom import path](https://jve.linuxwall.info/blog/index.php?post/2015/08/26/Hosting_Go_code_on_Github_with_custom_import_path)
 - [Implementing SOLID principles in Go](https://dave.cheney.net/2016/08/20/solid-go-design)
+- [Clarity over readability in Go](https://dave.cheney.net/2019/07/09/clear-is-better-than-clever)
 
 Intermediate:
 - [Going Go Programming](https://www.goinggo.net/)
@@ -26,3 +27,5 @@ Other links:
 Profiling:
 - http://rodrigodumont.com/2017/11/10/profile-go-micro-services-in-kubernetes-with-pprof/
 
+Blogs:
+- https://dave.cheney.net/
