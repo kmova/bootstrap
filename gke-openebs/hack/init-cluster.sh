@@ -1,6 +1,6 @@
 #C_VERSION="" #" --cluster-version 1.12.5-gke.5"
 #gcloud container get-server-config
-C_VERSION=" --cluster-version 1.14.6-gke.13"
+C_VERSION=" --cluster-version 1.14.8-gke.12"
 if [ $# -gt 0 ]; then
   C_VERSION=" --cluster-version $1"
 fi
