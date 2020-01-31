@@ -1,0 +1,8 @@
+gcloud compute addresses create kmova-helm-external-ip --region us-central1 --project $PROJECT
+gcloud compute addresses describe kmova-helm-external-ip --region us-central1 --project $PROJECT --format='value(address)'
+
+
+helm repo add gitlab-openebs https://charts.gitlab.io/
+helm repo update
+helm search -l gitlab-openebs/gitlab
+helm upgrade --install gitlab gitlab-openebs/gitlab -f values-minimal-gke.yaml --timeout 600
