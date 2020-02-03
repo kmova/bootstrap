@@ -1,5 +1,59 @@
-gcloud compute addresses create kmova-helm-external-ip --region us-central1 --project $PROJECT
-gcloud compute addresses describe kmova-helm-external-ip --region us-central1 --project $PROJECT --format='value(address)'
+- Note the PROJECT ID using `gcloud info` 
+
+- Create static ip address
+  ```
+  gcloud compute addresses create gitlab-demo-external-ip --region us-central1 --project $PROJECT
+  gcloud compute addresses describe gitlab-demo-external-ip --region us-central1 --project $PROJECT --format='value(address)'
+  ```
+- Setup the DNS entry for Static IP with domain name. 
+  Assuming you will provide mayaonline.io as domain name, 
+  then setup A record for gitlab.mayaonline.io with the DNS registrar.
+
+- Create the cluster using slightly modified bootstrap script from GitLab. 
+  Reference: https://docs.gitlab.com/charts/installation/cloud/gke.html
+  Download : gke_bootstrap.sh, common.sh 
+  Changes done: 
+  - Set the cluster name to `gitlab-demo`
+  - Set to use static ip=true
+  - Remove automated creation and deletion of static ip address
+  - update the cluster create  command to install local ssd to gke cluster
+
+  ```
+  export PROJECT=strong-eon-153112
+  ./gke_bootstrap.sh up
+  ```
+
+  Cluster will be setup using RBAC and helm will be installed. 
+
+- Run the helm chart. 
+
+  ```
+  helm upgrade --install gitlab gitlab-openebs/gitlab \
+     --timeout 600 \
+     --set global.hosts.domain=mayaonline.io \
+     --set global.hosts.externalIP=xx.xx.xx.xx \
+     --set certmanager-issuer.email=admin@mayaonline.io 
+     --set global.edition=ce
+
+  ```
+
+- Wait for all the pods, certificates and svc to be online. 
+  ```
+  kubectl get pods
+  kubectl get svc
+  kubectl get certificates
+  ```
+
+- Get `root` user auto-generated password
+  ```
+  kubectl get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo
+  ```
+
+- Login to https://gitlab.mayaonline.io
+  You can register as a new user and login as well. 
+
+
+
 
 
 helm repo add gitlab-openebs https://charts.gitlab.io/
