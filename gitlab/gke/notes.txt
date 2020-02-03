@@ -1,23 +1,29 @@
-- Note the PROJECT ID using `gcloud info` 
 
-- Create static ip address
-  ```
-  gcloud compute addresses create gitlab-demo-external-ip --region us-central1 --project $PROJECT
-  gcloud compute addresses describe gitlab-demo-external-ip --region us-central1 --project $PROJECT --format='value(address)'
-  ```
-- Setup the DNS entry for Static IP with domain name. 
-  Assuming you will provide mayaonline.io as domain name, 
-  then setup A record for gitlab.mayaonline.io with the DNS registrar.
+## Prerequisites
 
-- Create the cluster using slightly modified bootstrap script from GitLab. 
-  Reference: https://docs.gitlab.com/charts/installation/cloud/gke.html
-  Download : gke_bootstrap.sh, common.sh 
-  Changes done: 
-  - Set the cluster name to `gitlab-demo`
-  - Set to use static ip=true
-  - Remove automated creation and deletion of static ip address
-  - update the cluster create  command to install local ssd to gke cluster
+- Create a static IP address and setup the DNN entries
+  - Create static ip address
+    Note the PROJECT ID using `gcloud info` 
+    ```
+    gcloud compute addresses create gitlab-demo-external-ip --region us-central1 --project $PROJECT
+    gcloud compute addresses describe gitlab-demo-external-ip --region us-central1 --project $PROJECT --format='value(address)'
+    ```
+  - Setup the DNS entry for Static IP with domain name. 
+    Assuming you will use mayaonline.io as domain name, 
+    setup `A record` for gitlab.mayaonline.io with the DNS registrar.
 
+- Download the gke cluster bootstrap script and modify to your environment 
+  - Download : gke_bootstrap.sh, common.sh from below references
+  - Modify the following in the scripts: 
+    - Set the cluster name to `gitlab-demo`
+    - Set to use static ip=true
+    - Remove automated creation and deletion of static ip address
+    - update the cluster create  command to install local ssd to gke cluster
+
+- Make sure you have admin access to create GKE cluster and your helm version 
+  is above 2.12
+
+- Create GKE cluster using bootstrap scripts
   ```
   export PROJECT=strong-eon-153112
   ./gke_bootstrap.sh up
@@ -28,6 +34,9 @@
 - Run the helm chart. 
 
   ```
+  helm repo add gitlab-openebs https://charts.gitlab.io/
+  helm repo update
+  helm search -l gitlab-openebs/gitlab
   helm upgrade --install gitlab gitlab-openebs/gitlab \
      --timeout 600 \
      --set global.hosts.domain=mayaonline.io \
@@ -35,6 +44,11 @@
      --set certmanager-issuer.email=admin@mayaonline.io 
      --set global.edition=ce
 
+  ```
+
+  Alternatively use the following:
+  ```
+  helm upgrade --install gitlab gitlab-openebs/gitlab -f values-minimal-gke.yaml --timeout 600
   ```
 
 - Wait for all the pods, certificates and svc to be online. 
@@ -52,11 +66,8 @@
 - Login to https://gitlab.mayaonline.io
   You can register as a new user and login as well. 
 
+- References:
+  - https://docs.gitlab.com/charts/installation/cloud/gke.html
+  - https://gitlab.com/gitlab-org/charts/gitlab/blob/master/scripts/gke_bootstrap_script.sh
+  - https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/scripts/common.sh
 
-
-
-
-helm repo add gitlab-openebs https://charts.gitlab.io/
-helm repo update
-helm search -l gitlab-openebs/gitlab
-helm upgrade --install gitlab gitlab-openebs/gitlab -f values-minimal-gke.yaml --timeout 600
