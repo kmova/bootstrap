@@ -1,0 +1,32 @@
+# This is an example values.yaml. 
+# - persistent volumes point to openebs storage classes
+global:
+  edition: ce
+  hosts:
+    externalIP: 35.192.94.76
+    domain: mayaonline.io
+certmanager-issuer:
+  email: kiran.mova@mayadata.io
+gitlab:
+  gitaly:
+    persistence:
+      storageClass: openebs-cstor-multizone
+      size: 50Gi
+postgresql:
+  persistence:
+    storageClass: openebs-cstor-multizone
+    size: 8Gi
+minio:
+  persistence:
+    storageClass: openebs-cstor-multizone
+    size: 10Gi
+redis:
+  global:
+    storageClass: openebs-localssd
+  persistence:
+    storageClass: openebs-localssd
+    size: 5Gi
+prometheus:
+  install: false
+gitlab-runner:
+  install: false

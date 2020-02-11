@@ -31,36 +31,37 @@
 
   Cluster will be setup using RBAC and helm will be installed. 
 
+- Setup OpenEBS
+  ```
+  helm install --namespace openebs --name openebs stable/openebs
+  kubectl get pods -n openebs
+  kubectl get bd -n openebs -o custom-columns=NAME:.metadata.name,NODE:.spec.nodeAttributes.nodeName,PATH:spec.path,FS:spec.filesystem.mountPoint
+
+  #Edit spc-cstor-multizone.yaml
+  kubectl apply -f spc-cstor-multizone.yaml
+  kubectl apply -f sc-openebs-localssd.yaml
+  ```
+
 - Run the helm chart. 
 
   ```
   helm repo add gitlab-openebs https://charts.gitlab.io/
   helm repo update
   helm search -l gitlab-openebs/gitlab
-  helm upgrade --install gitlab gitlab-openebs/gitlab \
-     --timeout 600 \
-     --set global.hosts.domain=mayaonline.io \
-     --set global.hosts.externalIP=xx.xx.xx.xx \
-     --set certmanager-issuer.email=admin@mayaonline.io 
-     --set global.edition=ce
-
-  ```
-
-  Alternatively use the following:
-  ```
-  helm upgrade --install gitlab gitlab-openebs/gitlab -f values-minimal-gke.yaml --timeout 600
+  helm upgrade --install gitlab gitlab-openebs/gitlab -f values-openebs-gke.yaml --timeout 600
   ```
 
 - Wait for all the pods, certificates and svc to be online. 
   ```
-  kubectl get pods
-  kubectl get svc
-  kubectl get certificates
+  kubectl get -n gitlab pods
+  kubectl get -n gitlab svc
+  kubectl get -n gitlab certificates
+  kubectl get pvc -n gitlab
   ```
 
 - Get `root` user auto-generated password
   ```
-  kubectl get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo
+  kubectl get -n gitlab secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo
   ```
 
 - Login to https://gitlab.mayaonline.io
