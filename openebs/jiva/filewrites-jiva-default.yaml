@@ -1,0 +1,45 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: filewrite-jd-claim
+spec:
+  storageClassName: openebs-jiva-default
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5G
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filewrites-jd
+  labels:
+    name: filewrites-jd
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      name: filewrites-jd 
+  template: 
+    metadata:
+      labels: 
+        name: filewrites-jd
+    spec:
+      containers:
+        - name: filewrites-jd
+          image: busybox
+          imagePullPolicy: Always
+          command:
+          - sh
+          - -c
+          - 'while true; do date > /mnt/data/$(hostname)-$(date +"%s").txt; sync; sleep 5; done'
+          volumeMounts:
+            - mountPath: /mnt/data/
+              name: data-vol
+      volumes:
+        - name: data-vol
+          persistentVolumeClaim:
+            claimName: filewrite-jd-claim
+---
