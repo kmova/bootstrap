@@ -5,5 +5,6 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 MYBRANCH=$1
+git checkout master
 git branch -d $MYBRANCH
 git push origin --delete $MYBRANCH
