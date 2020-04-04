@@ -1,14 +1,4 @@
 script:
-  #- if [ ! -z $TRAVIS_TAG ] && [ "$TRAVIS_REPO_SLUG" == "kmova/bootstrap" ]; then
-  - if [ "kmova/bootstrap" = "$TRAVIS_REPO_SLUG" ]; then
-      echo "just checking if = works";
-    fi
-
-  - if [ "$TRAVIS_REPO_SLUG" == "kmova/bootstrap" ]; then
+  - if [ ! -z $TRAVIS_TAG ] && [ "$TRAVIS_REPO_SLUG" == "kmova/bootstrap" ]; then
       echo "just checking if == works";
     fi
-
-  - if [ "$TRAVIS_REPO_SLUG" -eq "kmova/bootstrap" ]; then
-      echo "just checking if eq works";
-    fi
-  
