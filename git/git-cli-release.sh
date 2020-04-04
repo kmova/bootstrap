@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 set -e
 
 if [ "$#" -ne 3 ]; then

@@ -1,0 +1,45 @@
+#!/bin/bash
+set -e
+
+if [ -z ${DIRECTOR_PKEY} ] || \
+ [ -z ${DIRECTOR_SKEY} ] || \
+ [ -z ${DIRECTOR_URL} ] || \
+ [ -z ${DIRECTOR_GROUP_ID} ];
+then
+  echo "Error: Unable to execute $0. Missing required Environment variables."
+  echo "Make sure you have set the following";
+  echo "DIRECTOR_URL points to your director API endpoint."; 
+  echo "DIRECTOR_PKEY is the public key associated with your API token.";
+  echo "DIRECTOR_SKEY is the secret key associated with your API token.";
+  echo "DIRECTOR_GROUP_ID is the group from which project details are fetched.";
+  echo " You can use 'get-group-details' to get default DIRECTOR_GROUP_ID for your account.";
+  echo 
+  exit 1
+fi
+
+
+C_GET_PROJECTS_URL=${DIRECTOR_URL}/groups/${DIRECTOR_GROUP_ID}/projects/
+RESP_FILE=temp-curl-get-proj-response.txt
+
+rm -rf $RESP_FILE
+
+response_code=$(curl -u ${DIRECTOR_PKEY}:${DIRECTOR_SKEY} \
+ -w "%{http_code}" \
+ --silent \
+ --output $RESP_FILE \
+ --url ${C_GET_PROJECTS_URL} )
+
+
+rc_code=0
+if [ $response_code != "200" ]; then
+    echo "Error: Unable to $0. See below response for more details"
+    cat $RESP_FILE
+    rc_code=1
+else 
+    echo "Projects (id and names) under Group Id ${DIRECTOR_GROUP_ID} are:"
+    cat $RESP_FILE | jq '.' | grep -w "id\|name" | grep -v "null\|https"
+fi
+
+rm -rf $RESP_FILE
+
+exit ${rc_code}

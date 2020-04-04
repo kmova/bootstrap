@@ -1,0 +1,41 @@
+#!/bin/bash
+set -e
+
+if [ -z ${DIRECTOR_PKEY} ] || \
+ [ -z ${DIRECTOR_SKEY} ] || \
+ [ -z ${DIRECTOR_URL} ];
+then
+  echo "Error: Unable to execute $0. Missing required Environment variables."
+  echo "Make sure you have set the following";
+  echo "DIRECTOR_URL points to your director API endpoint."; 
+  echo "DIRECTOR_PKEY is the public key associated with your API token.";
+  echo "DIRECTOR_SKEY is the secret key associated with your API token.";
+  exit 1
+fi
+
+C_GET_GROUP_URL=${DIRECTOR_URL}/groups?name=ProjectAccount
+RESP_FILE=temp-curl-get-group-response.txt
+
+rm -rf $RESP_FILE
+
+response_code=$(curl -u ${DIRECTOR_PKEY}:${DIRECTOR_SKEY} \
+ -w "%{http_code}" \
+ --silent \
+ --output $RESP_FILE \
+ --url ${C_GET_GROUP_URL} )
+
+#cat $RESP_FILE | jq '.'
+
+rc_code=0
+if [ $response_code != "200" ]; then
+    echo "Error: Unable to $0. See below response for more details"
+    cat $RESP_FILE
+    rc_code=1
+else 
+    group_id=$(cat $RESP_FILE | jq '.' | grep self | tail -1 | tr '\"' ' ' | tr '\,' ' ' | tr '\/' ':' | rev | cut -d':' -f1 | rev )
+    echo "Group Id associated with Group=ProjectAccount is: ${group_id}"
+fi
+
+rm -rf $RESP_FILE
+
+exit ${rc_code}

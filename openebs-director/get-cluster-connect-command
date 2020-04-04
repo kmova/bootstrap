@@ -1,0 +1,86 @@
+#!/bin/bash
+set -e
+
+if [ -z ${DIRECTOR_PKEY} ] || \
+ [ -z ${DIRECTOR_SKEY} ] || \
+ [ -z ${DIRECTOR_URL} ] || \
+ [ -z ${DIRECTOR_GROUP_ID} ] || \
+ [ -z ${DIRECTOR_PROJ_NAME} ] || \
+ [ -z ${DIRECTOR_PROJ_ID} ];
+then
+  echo "Error: Unable to execute $0. Missing required Environment variables."
+  echo "Make sure you have set the following";
+  echo "DIRECTOR_URL points to your director API endpoint."; 
+  echo "DIRECTOR_PKEY is the public key associated with your API token.";
+  echo "DIRECTOR_SKEY is the secret key associated with your API token.";
+  echo 
+  echo "DIRECTOR_GROUP_ID is the group from which project details are fetched.";
+  echo " You can use 'get-group-details' to get default DIRECTOR_GROUP_ID for your account.";
+  echo 
+  echo "DIRECTOR_PROJ_ID and DIRECTOR_PROJ_NAME is the project to which cluster will be connected";
+  echo " You can use 'get-project-details' to list all the projects under your account.";
+  exit 1
+fi
+
+
+C_CLUSTER_NAME="testcliconnect"
+C_CREATE_CLUSTER_URL=${DIRECTOR_URL}/groups/${DIRECTOR_GROUP_ID}/clusters/
+RESP_FILE=temp-curl-create-cluster-response.txt
+
+CLUSTER_CREATE_JSON=$(echo \
+{ \
+ \"name\":\"${C_CLUSTER_NAME}\", \
+ \"projectId\":\"${DIRECTOR_PROJ_ID}\", \
+ \"provider\":\"default\", \
+ \"k8sServerConfig\":null \
+} \
+)
+
+rm -rf $RESP_FILE
+
+response_code=$(curl -u ${DIRECTOR_PKEY}:${DIRECTOR_SKEY} \
+ -w "%{http_code}" \
+ --silent \
+ --output $RESP_FILE \
+ --url ${C_CREATE_CLUSTER_URL} \
+ --request POST \
+ --header 'content-type: application/json' \
+ --data "$CLUSTER_CREATE_JSON")
+
+rc_code=0
+if [ $response_code != "201" ]; then
+    echo "Error: Unable to $0. See below response for more details"
+    cat $RESP_FILE  | jq '.'
+    rm -rf $RESP_FILE
+    exit 1
+fi 
+
+
+cluster_id=$(cat $RESP_FILE | jq '.' | grep self | tr ',:"' ' ' | rev | cut -d'/' -f1 | rev)
+rm -rf $RESP_FILE
+
+
+sleep 60
+
+C_GET_CLUSTER_URL=${DIRECTOR_URL}/groups/${DIRECTOR_GROUP_ID}/clusters/${cluster_id}
+RESP_FILE=temp-curl-get-cluster-response.txt
+
+
+rm -rf $RESP_FILE
+response_code=$(curl -u ${DIRECTOR_PKEY}:${DIRECTOR_SKEY} \
+ -w "%{http_code}" \
+ --silent \
+ --output $RESP_FILE \
+ --url ${C_GET_CLUSTER_URL} )
+
+rc_code=0
+if [ $response_code != "200" ]; then
+    echo "Error: Unable to $0. See below response for more details"
+    cat $RESP_FILE  | jq '.'
+else
+    connect_command=$(cat $RESP_FILE | jq '.' | grep -w "clusterCommand" | grep -v "null\|sort" | tr ',"' ' ' | cut -c 24-)
+    echo $connect_command
+fi 
+
+rm -rf $RESP_FILE
+exit ${rc_code}
