@@ -1,5 +1,5 @@
 script:
-  - if [[ -z $TRAVIS_TAG ] && "$TRAVIS_REPO_SLUG" == "kmova/bootstrap" ]]; then
+  - if [[ -z $TRAVIS_TAG ] && ["$TRAVIS_REPO_SLUG" == "kmova/bootstrap" ]]; then
       echo "just checking"
     fi
   
