@@ -1,6 +1,3 @@
-#just avoid getting into default language
-language: go
-
 script:
   - if [[ -z $TRAVIS_TAG ] && "$TRAVIS_REPO_SLUG" == "kmova/bootstrap" ]]; then
       echo "just checking"
