@@ -1,38 +1,8 @@
-dist: xenial
-#dist: trusty
-sudo: required
+#just avoid getting into default language
 language: go
 
-env:
-  - CHANGE_MINIKUBE_NONE_USER=true MINIKUBE_WANTREPORTERRORPROMPT=false MINIKUBE_WANTUPDATENOTIFICATION=false
-
-go:
-  - 1.9.2
-
-services: docker
-
-install: true
-
-before_script:
-  - sudo uname -a
-  - cat /etc/os-release
-  - sudo docker version
-  # Download kubectl, which is a requirement for using minikube.
-  - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
-  # Download minikube.
-  - curl -Lo minikube.bin https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube.bin && sudo mv minikube.bin /usr/local/bin/minikube
-  - minikube version
-  - mkdir $HOME/.kube || true
-  - touch $HOME/.kube/config
-  - sudo -E minikube start --v=999 --logtostderr --vm-driver=none --bootstrapper=localkube
-  # Fix the kubectl context, as it's often stale.
-  - minikube update-context
-  # Wait for Kubernetes to be up and ready.
-  - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
-  # Download and initialize helm.
-  #- ./openebs/ci/ubuntu-compile-nsenter.sh && sudo cp .tmp/util-linux-2.30.2/nsenter /usr/bin
-
 script:
-  # Verify that minkube is setup
-  - kubectl version
-  - kubectl cluster-info
+  - if [[ -z $TRAVIS_TAG ] && "$TRAVIS_REPO_SLUG" == "kmova/bootstrap" ]]; then
+      echo "just checking"
+    fi
+  
