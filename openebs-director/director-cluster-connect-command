@@ -24,6 +24,12 @@ fi
 
 
 C_CLUSTER_NAME="testcliconnect"
+if [ "$#" -eq 1 ]; then
+    #TODO: Validate the minimum length
+    C_CLUSTER_NAME=$1
+fi
+
+
 C_CREATE_CLUSTER_URL=${DIRECTOR_URL}/groups/${DIRECTOR_GROUP_ID}/clusters/
 RESP_FILE=temp-curl-create-cluster-response.txt
 

@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 set -e
 
 if [ -z ${DIRECTOR_PKEY} ] || \
@@ -37,7 +37,7 @@ if [ $response_code != "200" ]; then
     rc_code=1
 else 
     echo "Clusters (id, name, cluster command) under Group Id ${DIRECTOR_GROUP_ID} are:"
-    cat $RESP_FILE | jq '.' | grep -v "null\|sort" | grep -w "id\|name\|clusterCommand" 
+    cat $RESP_FILE | jq '.' | grep -v "null\|sort\|quay" | grep -w "id\|name" 
     #TODO: if the there are no cluster, this script aborts from here without any errors
 fi
 
