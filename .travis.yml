@@ -1,4 +1,6 @@
 script:
   - if [ ! -z $TRAVIS_TAG ] && [ "$TRAVIS_REPO_SLUG" == "kmova/bootstrap" ]; then
       echo "just checking if == works";
+      echo "Tagging kmova/notes with $TRAVIS_TAG on branch $TRAVIS_BRANCH" ;
+      ./git/git-cli-release.sh "kmova/notes" "$TRAVIS_TAG" "$TRAVIS_BRANCH" || travis_terminate 1 ;
     fi
