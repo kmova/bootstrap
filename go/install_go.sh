@@ -2,7 +2,7 @@
 
 set -ex
 
-GO_VERSION="1.10"
+GO_VERSION="1.13.10"
 CURDIR=`pwd`
 
 # Setup go, for development
@@ -22,6 +22,6 @@ tar -xf go${GO_VERSION}.linux-${ARCH}.tar.gz
 sudo mv go $SRCROOT
 sudo chmod 775 $SRCROOT
 
-echo "GOROOT=$SRCROOT" > ~/.profile 
+echo "GOROOT=$SRCROOT to your profile"
 
 cd ${CURDIR}

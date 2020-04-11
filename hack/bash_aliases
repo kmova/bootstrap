@@ -1,0 +1,10 @@
+alias k='kubectl'
+alias kpods='kubectl get pods'
+alias knodes='kubectl get nodes'
+
+alias kapply='kubectl apply -f'
+alias kdelete='kubectl delete -f'
+
+alias opods='kubectl get pods -n openebs'
+alias ologs='kubectl logs -f -n openebs'
+
