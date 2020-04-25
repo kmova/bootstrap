@@ -1,122 +1,120 @@
-# Setup ARK (Valero) with Restic on GCP
+# Setup Velero with Restic on GCP
 
-This document contains quick reference of the installation steps. 
+This document contains quick reference for setting up Velero with Restic on GCP
 
-Reference:
- - https://heptio.github.io/ark/v0.9.0/quickstart
- - https://heptio.github.io/ark/v0.9.0/gcp-config
+Reference: https://github.com/vmware-tanzu/velero-plugin-for-gcp#setup
 
-## Setup buckets and IAM roles
+## Setup GCP buckets 
 
-### Buckets for ARK backup and Restic data backup.
+The buckets will be used for storing application and volume backup
+
 ```
-gsutil mb gs://kmova-openebs-ark/
-gsutil mb gs://kmova-openebs-ark-restic/
+export VELERO_BUCKET=<YOUR_BUCKET>
+#export VELERO_BUCKET="kmova-openebs-velero"
+gsutil mb gs://${VELERO_BUCKET}/
+gsutil mb gs://${VELERO_BUCKET}-restic/
 ```
 
-### IAM Setup
+### Verify
+
+```
+gsutil ls -b gs://${VELERO_BUCKET}
+gsutil ls -b gs://${VELERO_BUCKET}-restic
+```
+
+## Set permissions on GCP Buckets for Velero
+
+### Save PROJECT_ID
 
 ```
 gcloud config list
-# Fetch the project id 
-export PROJECT_ID=gcp-project-id
+# Example output
+# [core]
+# account = <user email>
+# project = <gcp project id>
+export PROJECT_ID=<gcp_project_id>
 ```
 
-```
-gcloud iam service-accounts create heptio-ark --display-name "Heptio Ark service account"
-gcloud iam service-accounts list
-export SERVICE_ACCOUNT_EMAIL="heptio-ark@gcp-project-id.iam.gserviceaccount.com"
-```
+
+### Setup Service Account 
 
 ```
-ROLE_PERMISSIONS=(
- compute.disks.get
+export VELERO_SERVICE_ACCOUNT=<account name>
+#export VELERO_SERVICE_ACCOUNT="velero-kmova"
+gcloud iam service-accounts create VELERO_SERVICE_ACCOUNT --display-name "Service account for velero"
+export VELERO_SERVICE_ACCOUNT_EMAIL="${VELERO_SERVICE_ACCOUNT}@${PROJECT_ID}.iam.gserviceaccount.com"
+```
+
+#### Verify Service account exists
+
+```
+gcloud iam service-accounts describe $VELERO_SERVICE_ACCOUNT_EMAIL
+```
+
+### Attach IAM policies to Velero service account. 
+
+```
+export VELERO_ROLES=<unique role name>
+#export VELERO_ROLES="velerokmova.server"
+
+ROLE_PERMISSIONS=( 
+ compute.disks.get 
  compute.disks.create
  compute.disks.createSnapshot
  compute.snapshots.get
  compute.snapshots.create
  compute.snapshots.useReadOnly
  compute.snapshots.delete
- compute.projects.get
+ compute.zones.get
 )
-```
 
-```
-gcloud beta iam roles create heptio_ark.server \
+gcloud iam roles create ${VELERO_ROLES} \
  --project $PROJECT_ID \
- --title "Heptio Ark Server" \
- --permissions "$(IFS=","; echo "${ROLE_PERMISSIONS[*]}")"
+ --title "Velero Server for ${VELERO_BUCKET}" \
+ --permissions "$(IFS=","; echo "${ROLE_PERMISSIONS[*]}")"    
 
-gcloud projects add-iam-policy-binding $PROJECT_ID \
- --member serviceAccount:$SERVICE_ACCOUNT_EMAIL \
- --role projects/$PROJECT_ID/roles/heptio_ark.server
+gcloud projects add-iam-policy-binding ${PROJECT_ID} \
+ --member serviceAccount:${VELERO_SERVICE_ACCOUNT_EMAIL} \
+ --role projects/$PROJECT_ID/roles/${VELERO_ROLES}
 
-gsutil iam ch serviceAccount:$SERVICE_ACCOUNT_EMAIL:objectAdmin gs://kmova-openebs-ark/
-gsutil iam ch serviceAccount:$SERVICE_ACCOUNT_EMAIL:objectAdmin gs://kmova-openebs-ark-restic/
+gsutil iam ch serviceAccount:$SERVICE_ACCOUNT_EMAIL:objectAdmin gs://${VELERO-BUCKET}
+gsutil iam ch serviceAccount:$SERVICE_ACCOUNT_EMAIL:objectAdmin gs://${VELERO-BUCKET}-restic/
+```
+
+## Install
+
+### Setup environment variables
+```
+export VELERO_BUCKET=<YOUR_BUCKET>
+export PROJECT_ID=<gcp_project_id>
+export VELERO_SERVICE_ACCOUNT=<account name>
+#export VELERO_SERVICE_ACCOUNT="velero-kmova"
+export VELERO_SERVICE_ACCOUNT_EMAIL="${VELERO_SERVICE_ACCOUNT}@${PROJECT_ID}.iam.gserviceaccount.com"
+#export VELERO_BUCKET="kmova-openebs-velero"
+
+```
+### Create credentials-velero file to be used with velero install
+```
+gcloud iam service-accounts keys create credentials-velero --iam-account $VELERO_SERVICE_ACCOUNT_EMAIL
+mkdir -p $HOME/.velero/
+mv credentials-velero $HOME/.velero/
+```
+
+### Download 
+
+```
+wget https://github.com/vmware-tanzu/velero/releases/download/v1.3.2/velero-v1.3.2-linux-amd64.tar.gz
+tar -xvf velero-v1.3.2-linux-amd64.tar.gz
+sudo mv velero-v1.3.2-linux-amd64/velero /usr/local/bin/
 ```
 
 
-## Download and setup ARK on development host
-
+### Install with restic
 ```
-git clone https://github.com/heptio/ark.git
-cd ark
-git checkout v0.9.5
+velero install \
+ --provider gcp \
+ --plugins velero/velero-plugin-for-gcp:v1.0.1 \
+ --bucket $VELERO_BUCKET \
+ --secret-file ~/.velero/credentials-velero \
+ --use-restic  --wait
 ```
-
-```
-vi examples/gcp/00-ark-config.yaml
----
-apiVersion: ark.heptio.com/v1
-kind: Config
-metadata:
-  namespace: heptio-ark
-  name: default
-persistentVolumeProvider:
-  name: gcp
-backupStorageProvider:
-  name: gcp
-  bucket: kmova-openebs-ark
-  # Uncomment the below line to enable restic integration.
-  # The format for resticLocation is <bucket>[/<prefix>],
-  # e.g. "my-restic-bucket" or "my-restic-bucket/repos".
-  # This MUST be a different bucket than the main Ark bucket
-  # specified just above.
-  resticLocation: kmova-openebs-ark-restic
-backupSyncPeriod: 30m
-gcSyncPeriod: 30m
-scheduleSyncPeriod: 1m
-restoreOnlyMode: false
-```
-
-```
-wget https://github.com/heptio/ark/releases/download/v0.9.5/ark-v0.9.5-linux-amd64.tar.gz
-tar -zxvf ark-v0.9.5-linux-amd64.tar.gz
-sudo mv ark /usr/local/bin/
-sudo mv ark-restic-restore-helper /usr/local/bin/
-```
-
-## Install ARK on GKE Cluster
-
-Go to the checked out ark repo on the development host.
-
-```
-kubectl apply -f examples/common/00-prereqs.yaml
-
-#set the SERVICE_ACCOUNT_EMAIL and PROJECT_ID
-# using steps above
-gcloud iam service-accounts keys create credentials-ark \
- --iam-account $SERVICE_ACCOUNT_EMAIL
-
-kubectl create secret generic cloud-credentials \
- --namespace heptio-ark \
- --from-file cloud=credentials-ark
-
-kubectl apply -f examples/gcp/00-ark-config.yaml
-
-kubectl apply -f examples/gcp/10-deployment.yaml
-
-kubectl apply -f examples/gcp/20-restic-daemonset.yaml
-```
-
-
