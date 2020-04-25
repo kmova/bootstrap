@@ -4,8 +4,26 @@ TARGETS := alpha beta
 .nondefault:
 	@echo "Execute non-default target"
 
+ifeq (${XC_ARCH}, )
+  XC_ARCH:=$(shell go env GOARCH)
+endif
+export XC_ARCH
+
+ifeq (${ARCHF}, )
+  ARCHF:=${XC_ARCH}
+  export ARCHF
+endif
+
+ifeq (${ARCHC}, )
+  ARCHC:=${XC_ARCH}
+  export ARCHC
+endif
+
 #beta will be executed first, even though alpha is before
 $(TARGETS):
+	echo ${XC_ARCH}
+	echo ${ARCHF}
+	echo ${ARCHC}
 	@echo $@
 
 #Though recipe is defined above, additional dependency is added

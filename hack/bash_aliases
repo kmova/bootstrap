@@ -1,10 +1,29 @@
+#Kubernetes aliases
 alias k='kubectl'
 alias kpods='kubectl get pods'
+alias kdesc='kubectl describe pod'
 alias knodes='kubectl get nodes'
 
 alias kapply='kubectl apply -f'
 alias kdelete='kubectl delete -f'
 
+#OpenBS aliases
 alias opods='kubectl get pods -n openebs'
 alias ologs='kubectl logs -f -n openebs'
+alias odesc='kubectl describe pod -n openebs'
+
+
+#Development aliases
+alias cd-c='cd $GOPATH/src/github.com/openebs/charts'
+alias cd-d='cd $GOPATH/src/github.com/openebs/openebs-docs'
+alias cd-e='cd $GOPATH/src/github.com/openebs/external-storage'
+alias cd-m='cd $GOPATH/src/github.com/openebs/maya'
+alias cd-o='cd $GOPATH/src/github.com/openebs/openebs'
+
+alias cd-k-c='cd $GOPATH/src/github.com/kmova/charts'
+alias cd-k-d='cd $GOPATH/src/github.com/kmova/openebs-docs'
+alias cd-k-o='cd $GOPATH/src/github.com/kmova/openebs'
+
+alias cd-boot='cd $GOPATH/src/github.com/kmova/bootstrap'
+alias cd-notes='cd $GOPATH/src/github.com/kmova/notes'
 

@@ -1,0 +1,44 @@
+#Prior to running this YAML, setup NFS Server Provisioner 
+# helm install stable/nfs-server-provisioner \
+#   --name=openebs-nfs-local \
+#   --set=persistence.enabled=true,\
+#         persistence.storageClass=openebs-hostpath,\
+#         persistence.size=25Gi,\
+#         storageClass.name=openebs-nfs-local,\
+#         storageClass.provisionerName=openebs.io/nfs-local
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: busybox-sts-local-nfs
+spec:
+  replicas: 3
+  serviceName: ""
+  selector:
+    matchLabels:
+      app: busybox-nfs
+  template:
+    metadata:
+      labels:
+        app: busybox-nfs
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+        command:
+          - sh
+          - -c
+          - 'echo `date` from `hostname` >> /mnt/store/date.txt; mkdir /mnt/store/sub-dir1; sync; sleep 5; sync; tail -f /dev/null;'
+        volumeMounts:
+        - mountPath: /mnt/store
+          name: demo-local-nfs
+  volumeClaimTemplates:
+  - metadata:
+      name: demo-local-nfs
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      storageClassName: openebs-nfs-local
+      resources:
+        requests:
+          storage: 4G
