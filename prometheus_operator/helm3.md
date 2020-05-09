@@ -99,9 +99,12 @@ prometheus-operator-prometheus-node-exporter   ClusterIP   10.98.128.115   <none
 - Click on Dashboards -> Manage Dashboards. You must see a list of dashboards. Click on any of them like: `kubernetes-compute-resources-cluster`
 - You must see some colors like:
 
-![Grafana](bootstrap/prometheus_operator/grafana_prom_operator.png)
+![Grafana](https://github.com/kmova/bootstrap/blob/master/prometheus_operator/grafana_prom_operator.png?raw=true)
 
 
 ## References: 
 - https://helm.sh/docs/intro/install/
 - https://github.com/helm/charts/issues/19452
+- https://www.linode.com/docs/networking/ssh/using-ssh-on-windows/#ssh-tunneling-port-forwarding
+- https://github.com/helm/charts/tree/master/stable/prometheus-operator
+- https://github.com/helm/charts/tree/master/stable/grafana#configuration
