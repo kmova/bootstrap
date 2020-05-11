@@ -8,6 +8,12 @@ ifeq (${MAKE_UNQUOTED}, )
   export MAKE_UNQUOTED
 endif
 
+ifeq (${MAKE_NQUOTED}, )
+  MAKE_NQUOTED=$(MAKE_UNQUOTED:u%=%)
+  #MAKE_NQUOTED=$(shell go env GOOS)
+  export MAKE_NQUOTED
+endif
+
 hello:
 	./quoted.sh
 
