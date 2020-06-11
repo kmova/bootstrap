@@ -2,11 +2,11 @@ package main
 
 import "github.com/jpillora/go-ogle-analytics"
 
-func fireEvent( cid, ds, aid string,
-	ai, av string,
-	eType, eSubType, eId string,
-	eState string, 
-	eLabel string, eVal int64 ) {
+func fireVolumeEvent( clusterId, nodeType, k8sVersion string,
+	volumeType, openebsVersion string,
+	volumeEvent, pvName string,
+	replicaCount string, 
+	capacityKey string, capacityVal int64 ) {
 
 	client, err := ga.NewClient("UA-127388617-1")
 	if err != nil {
@@ -14,20 +14,23 @@ func fireEvent( cid, ds, aid string,
 	}
 
 	//client.ClientID("20eacc6c-e109-11e8-9f32-f2801f1b9fd1")
-	client.ClientID(cid).
-		DataSource(ds).
-		ApplicationInstallerID( aid ).
-		ApplicationID(ai).
-		ApplicationVersion(av)
+	client.ClientID(clusterId).
+		CampaignSource("openebs-operator-kmova").
+		CampaignContent(clusterId).
+		CampaignID("campaign-id").
+		CampaignName("campaign-name").
+		CampaignKeyword("campaign-keyword").
+		ApplicationID("OpenEBS").
+		ApplicationVersion(openebsVersion).
+		DataSource(nodeType).
+		ApplicationName(volumeType).
+		ApplicationInstallerID( k8sVersion ).
+		DocumentTitle(pvName).
+		DocumentHostName("hostname")
 
-
-	client.ApplicationName(eSubType).
-		DocumentTitle(eId)
-
-	event := ga.NewEvent(eType, eState)
-	event.
-		Label(eLabel).
-		Value(eVal)
+	event := ga.NewEvent(volumeEvent, replicaCount)
+	event.Label(capacityKey)
+	event.Value(capacityVal)
 
 
 	err = client.Send(event)
@@ -39,6 +42,24 @@ func fireEvent( cid, ds, aid string,
 }
 
 func main() {
+	clusterId := "2ea928fa-b83c-463b-954c-d22b49c60da6"
+	nodeType := "ubuntu 18.04.4 lts, 5.0.0-1032-gke"
+	k8sVersion := "v1.15.11-gke.13"
+	//k8sArch := ""
+	openebsVersion := "1.11.0-f1152d3"
+
+	volumeEvent := "volume-provision"
+	volumeType := "jiva"
+	pvName := "pvc-1827cb8d-8d45-4316-94ff-168ea312be61"
+	replicaCount := "replica:3"
+
+	fireVolumeEvent( clusterId, nodeType, k8sVersion,
+			volumeType, openebsVersion,
+			volumeEvent, pvName,
+			replicaCount,
+			"capacity", 2 ) 
+
+
 
 	/**
 	//Install Events - Init or Running
