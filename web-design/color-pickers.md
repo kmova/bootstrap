@@ -1,0 +1,16 @@
+- https://coolors.co/palettes/trending
+- https://paletton.com/
+- https://www.sessions.edu/color-calculator/
+- https://material.io/design/color/the-color-system.html#tools-for-picking-colors
+- https://material.io/resources/color/
+- http://scg.ar-ch.org/
+- http://davidjohnstone.net/pages/lch-lab-colour-gradient-picker
+- https://www.colorbox.io/
+- https://palettte.app/
+- https://hihayk.github.io/scale/
+- https://gka.github.io/palettes/
+- https://colors.eva.design/
+- https://palx.jxnblk.com/
+- https://colors.madscience.design/
+- https://meyerweb.com/eric/tools/color-blend/
+- https://www.0to255.com/
