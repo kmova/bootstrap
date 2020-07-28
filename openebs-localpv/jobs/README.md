@@ -49,4 +49,5 @@ GATES
 Known Limitations:
 - The scheduling is only based on the RAM and CPU. In case K8s schedules the pod to a node where the devices are exhausted, then the pod will remain in pending state. 
 - The scheduling can result in more than one pod getting scheduled to same node due to the CPU/RAM constraints. To avoid this, pod anti affinity should be set on the Statefulset.
+- When a STS and its pods are deleted, the associated PVCs are not automatically deleted by Kubernetes. A manual cleanup of the PVCs is required. 
 

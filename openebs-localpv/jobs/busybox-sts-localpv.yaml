@@ -14,6 +14,13 @@ spec:
       labels:
         app: busybox-local-sts
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: busybox-local-sts
+            topologyKey: kubernetes.io/hostname
       containers:
       - name: busybox
         image: busybox
