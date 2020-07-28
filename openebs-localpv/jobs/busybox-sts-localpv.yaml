@@ -16,11 +16,21 @@ spec:
     spec:
       affinity:
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app: busybox-local-sts
-            topologyKey: kubernetes.io/hostname
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: node
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - busybox-local-sts
+          #requiredDuringSchedulingIgnoredDuringExecution:
+          #- labelSelector:
+          #    matchLabels:
+          #      app: busybox-local-sts
+          #  topologyKey: kubernetes.io/hostname
       containers:
       - name: busybox
         image: busybox
