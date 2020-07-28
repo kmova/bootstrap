@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: busybox-local-sts
+spec:
+  replicas: 3
+  serviceName: ""
+  selector:
+    matchLabels:
+      app: busybox-local-sts
+  template:
+    metadata:
+      labels:
+        app: busybox-local-sts
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+        command:
+          - sh
+          - -c
+          - 'echo `date` from `hostname` >> /mnt/store/date.txt; mkdir /mnt/store/sub-dir1; sync; sleep 5; sync; tail -f /dev/null;'
+        volumeMounts:
+        - mountPath: /mnt/store
+          name: demo-local-sts
+  volumeClaimTemplates:
+  - metadata:
+      name: demo-local-sts
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      storageClassName: openebs-local-sts
+      resources:
+        requests:
+          storage: 4G
