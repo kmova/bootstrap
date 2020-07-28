@@ -1,4 +1,4 @@
-Example Statefulset using OpenEBS Local PV with Device. 
+## Example Statefulset using OpenEBS Local PV with Device. 
 
 
 (a) Label the block devices to be used for Local PV, using command like:
@@ -39,14 +39,13 @@ Example Statefulset using OpenEBS Local PV with Device.
 
     ```
     kmova-dev:~$ kubectl get pods -o wide
-    NAME                  READY   STATUS    RESTARTS   AGE   IP          NODE                                        NOMINATED NODE   READINESS 
-GATES
+    NAME                  READY   STATUS    RESTARTS   AGE   IP          NODE                                        NOMINATED NODE   READINESS GATES
     busybox-local-sts-0   1/1     Running   0          35s   10.44.2.9   gke-kmova-helm-default-pool-6597c2bc-wj7k   <none>           <none>
     busybox-local-sts-1   1/1     Running   0          27s   10.44.0.9   gke-kmova-helm-default-pool-6597c2bc-1gpt   <none>           <none>
     busybox-local-sts-2   1/1     Running   0          19s   10.44.1.6   gke-kmova-helm-default-pool-6597c2bc-n9kn   <none>           <none>
     ```
     			
-Known Limitations:
+### Known Limitations:
 - The scheduling is only based on the RAM and CPU. In case K8s schedules the pod to a node where the devices are exhausted, then the pod will remain in pending state. 
 - The scheduling can result in more than one pod getting scheduled to same node due to the CPU/RAM constraints. To avoid this, pod anti affinity should be set on the Statefulset.
 - When a STS and its pods are deleted, the associated PVCs are not automatically deleted by Kubernetes. A manual cleanup of the PVCs is required. 
