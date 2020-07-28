@@ -15,6 +15,16 @@ spec:
         app: busybox-local-sts
     spec:
       affinity:
+        #Use node affinity if the nodes are labelled as follows:
+        # kubectl label node gke-kmova-helm-default-pool-6597c2bc-n9kn openebs.io/node-type=storage
+        #nodeAffinity:
+        #  requiredDuringSchedulingIgnoredDuringExecution:
+        #    nodeSelectorTerms:
+        #    - matchExpressions:
+        #      - key: openebs.io/node-type
+        #        operator: In
+        #        values:
+        #        - storage
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 100
