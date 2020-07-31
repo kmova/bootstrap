@@ -130,21 +130,21 @@ elif [ "$1" = 'ext-fio' ]; then
 
     echo Testing Extended Write Bandwidth AIO 4 jobs...
     EXT_WRITE_BW_AIO_04=$(fio -group_reporting -numjobs=4 --randrepeat=0 --verify=0 --ioengine=libaio --direct=$FIO_DIRECT --gtod_reduce=1 --name=ext_write_bw --filename=$FBENCH_MOUNTPOINT/fiotest --bs=4K --iodepth=64 --size=$FIO_SIZE --readwrite=randwrite --time_based --ramp_time=2s --runtime=300s)
-    echo "$EXT_WRITE_BW_04"
+    echo "$EXT_WRITE_BW_AIO_04"
     EXT_WRITE_BW_AIO_04_VAL=$(echo "$EXT_WRITE_BW_AIO_04"|grep -E 'write:'|grep -Eoi 'BW=[0-9GMKiBs/.]+'|cut -d'=' -f2)
     echo
     echo
 
     echo Testing Extended Write Bandwidth AIO 8 jobs...
     EXT_WRITE_BW_AIO_08=$(fio -group_reporting -numjobs=8 --randrepeat=0 --verify=0 --ioengine=libaio --direct=$FIO_DIRECT --gtod_reduce=1 --name=ext_write_bw --filename=$FBENCH_MOUNTPOINT/fiotest --bs=4K --iodepth=64 --size=$FIO_SIZE --readwrite=randwrite --time_based --ramp_time=2s --runtime=300s)
-    echo "$EXT_WRITE_BW_08"
+    echo "$EXT_WRITE_BW_AIO_08"
     EXT_WRITE_BW_AIO_08_VAL=$(echo "$EXT_WRITE_BW_AIO_08"|grep -E 'write:'|grep -Eoi 'BW=[0-9GMKiBs/.]+'|cut -d'=' -f2)
     echo
     echo
 
     echo Testing Extended Write Bandwidth AIO 16 jobs...
     EXT_WRITE_BW_AIO_16=$(fio -group_reporting -numjobs=16 --randrepeat=0 --verify=0 --ioengine=libaio --direct=$FIO_DIRECT --gtod_reduce=1 --name=ext_write_bw --filename=$FBENCH_MOUNTPOINT/fiotest --bs=4K --iodepth=64 --size=$FIO_SIZE --readwrite=randwrite --time_based --ramp_time=2s --runtime=300s)
-    echo "$EXT_WRITE_BW_16"
+    echo "$EXT_WRITE_BW_AIO_16"
     EXT_WRITE_BW_AIO_16_VAL=$(echo "$EXT_WRITE_BW_AIO_16"|grep -E 'write:'|grep -Eoi 'BW=[0-9GMKiBs/.]+'|cut -d'=' -f2)
     echo
     echo
@@ -155,17 +155,17 @@ elif [ "$1" = 'ext-fio' ]; then
     echo = FIO bench Summary =
     echo = ioengine=sync     =
     echo =====================
-    echo "Random Read/Write BW (4 jobs): $WRITE_BW_VAL_04"
-    echo "Random Read/Write BW (8 jobs): $WRITE_BW_VAL_08"
-    echo "Random Read/Write BW (16 jobs): $WRITE_BW_VAL_16"
+    echo "Random Read/Write BW (4 jobs): $EXT_WRITE_BW_VAL_04"
+    echo "Random Read/Write BW (8 jobs): $EXT_WRITE_BW_VAL_08"
+    echo "Random Read/Write BW (16 jobs): $EXT_WRITE_BW_VAL_16"
     echo
     echo =====================
     echo = FIO bench Summary =
     echo = ioengine=libaio     =
     echo =====================
-    echo "Random Read/Write BW (4 jobs): $WRITE_BW_AIO_VAL_04"
-    echo "Random Read/Write BW (8 jobs): $WRITE_BW_AIO_VAL_08"
-    echo "Random Read/Write BW (16 jobs): $WRITE_BW_AIO_VAL_16"
+    echo "Random Read/Write BW (4 jobs): $EXT_WRITE_BW_AIO_VAL_04"
+    echo "Random Read/Write BW (8 jobs): $EXT_WRITE_BW_AIO_VAL_08"
+    echo "Random Read/Write BW (16 jobs): $EXT_WRITE_BW_AIO_VAL_16"
 
 
     rm $FBENCH_MOUNTPOINT/fiotest
