@@ -111,6 +111,7 @@ elif [ "$1" = 'ext-fio' ]; then
     EXT_WRITE_BW_04=$(fio -group_reporting -numjobs=4 --randrepeat=0 --verify=0 --ioengine=sync --direct=$FIO_DIRECT --gtod_reduce=1 --name=ext_write_bw --filename=$FBENCH_MOUNTPOINT/fiotest --bs=4K --iodepth=64 --size=$FIO_SIZE --readwrite=randwrite --time_based --ramp_time=2s --runtime=300s)
     echo "$EXT_WRITE_BW_04"
     EXT_WRITE_BW_04_VAL=$(echo "$EXT_WRITE_BW_04"|grep -E 'write:'|grep -Eoi 'BW=[0-9GMKiBs/.]+'|cut -d'=' -f2)
+    EXT_WRITE_IOPS_04_VAL=$(echo "$EXT_WRITE_BW_04"|grep -E 'write:'|grep -Eoi 'IOPS=[0-9k.]+'|cut -d'=' -f2)
     echo
     echo
 
@@ -118,6 +119,7 @@ elif [ "$1" = 'ext-fio' ]; then
     EXT_WRITE_BW_08=$(fio -group_reporting -numjobs=8 --randrepeat=0 --verify=0 --ioengine=sync --direct=$FIO_DIRECT --gtod_reduce=1 --name=ext_write_bw --filename=$FBENCH_MOUNTPOINT/fiotest --bs=4K --iodepth=64 --size=$FIO_SIZE --readwrite=randwrite --time_based --ramp_time=2s --runtime=300s)
     echo "$EXT_WRITE_BW_08"
     EXT_WRITE_BW_08_VAL=$(echo "$EXT_WRITE_BW_08"|grep -E 'write:'|grep -Eoi 'BW=[0-9GMKiBs/.]+'|cut -d'=' -f2)
+    EXT_WRITE_IOPS_08_VAL=$(echo "$EXT_WRITE_BW_08"|grep -E 'write:'|grep -Eoi 'IOPS=[0-9k.]+'|cut -d'=' -f2)
     echo
     echo
 
@@ -125,6 +127,7 @@ elif [ "$1" = 'ext-fio' ]; then
     EXT_WRITE_BW_16=$(fio -group_reporting -numjobs=16 --randrepeat=0 --verify=0 --ioengine=sync --direct=$FIO_DIRECT --gtod_reduce=1 --name=ext_write_bw --filename=$FBENCH_MOUNTPOINT/fiotest --bs=4K --iodepth=64 --size=$FIO_SIZE --readwrite=randwrite --time_based --ramp_time=2s --runtime=300s)
     echo "$EXT_WRITE_BW_16"
     EXT_WRITE_BW_16_VAL=$(echo "$EXT_WRITE_BW_16"|grep -E 'write:'|grep -Eoi 'BW=[0-9GMKiBs/.]+'|cut -d'=' -f2)
+    EXT_WRITE_IOPS_16_VAL=$(echo "$EXT_WRITE_BW_16"|grep -E 'write:'|grep -Eoi 'IOPS=[0-9k.]+'|cut -d'=' -f2)
     echo
     echo
 
@@ -132,6 +135,7 @@ elif [ "$1" = 'ext-fio' ]; then
     EXT_WRITE_BW_AIO_04=$(fio -group_reporting -numjobs=4 --randrepeat=0 --verify=0 --ioengine=libaio --direct=$FIO_DIRECT --gtod_reduce=1 --name=ext_write_bw --filename=$FBENCH_MOUNTPOINT/fiotest --bs=4K --iodepth=64 --size=$FIO_SIZE --readwrite=randwrite --time_based --ramp_time=2s --runtime=300s)
     echo "$EXT_WRITE_BW_AIO_04"
     EXT_WRITE_BW_AIO_04_VAL=$(echo "$EXT_WRITE_BW_AIO_04"|grep -E 'write:'|grep -Eoi 'BW=[0-9GMKiBs/.]+'|cut -d'=' -f2)
+    EXT_WRITE_IOPS_AIO_04_VAL=$(echo "$EXT_WRITE_BW_AIO_04"|grep -E 'write:'|grep -Eoi 'IOPS=[0-9k.]+'|cut -d'=' -f2)
     echo
     echo
 
@@ -139,6 +143,7 @@ elif [ "$1" = 'ext-fio' ]; then
     EXT_WRITE_BW_AIO_08=$(fio -group_reporting -numjobs=8 --randrepeat=0 --verify=0 --ioengine=libaio --direct=$FIO_DIRECT --gtod_reduce=1 --name=ext_write_bw --filename=$FBENCH_MOUNTPOINT/fiotest --bs=4K --iodepth=64 --size=$FIO_SIZE --readwrite=randwrite --time_based --ramp_time=2s --runtime=300s)
     echo "$EXT_WRITE_BW_AIO_08"
     EXT_WRITE_BW_AIO_08_VAL=$(echo "$EXT_WRITE_BW_AIO_08"|grep -E 'write:'|grep -Eoi 'BW=[0-9GMKiBs/.]+'|cut -d'=' -f2)
+    EXT_WRITE_IOPS_AIO_08_VAL=$(echo "$EXT_WRITE_BW_AIO_08"|grep -E 'write:'|grep -Eoi 'IOPS=[0-9k.]+'|cut -d'=' -f2)
     echo
     echo
 
@@ -146,6 +151,7 @@ elif [ "$1" = 'ext-fio' ]; then
     EXT_WRITE_BW_AIO_16=$(fio -group_reporting -numjobs=16 --randrepeat=0 --verify=0 --ioengine=libaio --direct=$FIO_DIRECT --gtod_reduce=1 --name=ext_write_bw --filename=$FBENCH_MOUNTPOINT/fiotest --bs=4K --iodepth=64 --size=$FIO_SIZE --readwrite=randwrite --time_based --ramp_time=2s --runtime=300s)
     echo "$EXT_WRITE_BW_AIO_16"
     EXT_WRITE_BW_AIO_16_VAL=$(echo "$EXT_WRITE_BW_AIO_16"|grep -E 'write:'|grep -Eoi 'BW=[0-9GMKiBs/.]+'|cut -d'=' -f2)
+    EXT_WRITE_IOPS_AIO_16_VAL=$(echo "$EXT_WRITE_BW_AIO_16"|grep -E 'write:'|grep -Eoi 'IOPS=[0-9k.]+'|cut -d'=' -f2)
     echo
     echo
 
@@ -155,17 +161,17 @@ elif [ "$1" = 'ext-fio' ]; then
     echo = FIO bench Summary =
     echo = ioengine=sync     =
     echo =====================
-    echo "Random Read/Write BW (4 jobs): $EXT_WRITE_BW_VAL_04"
-    echo "Random Read/Write BW (8 jobs): $EXT_WRITE_BW_VAL_08"
-    echo "Random Read/Write BW (16 jobs): $EXT_WRITE_BW_VAL_16"
+    echo "Random Write (4 jobs): IOPS: $EXT_WRITE_IOPS_04_VAL / BW: $EXT_WRITE_BW_04_VAL"
+    echo "Random Write (8 jobs): IOPS: $EXT_WRITE_IOPS_08_VAL / BW: $EXT_WRITE_BW_08_VAL"
+    echo "Random Write (16 jobs): IOPS: $EXT_WRITE_IOPS_16_VAL / BW: $EXT_WRITE_BW_16_VAL"
     echo
     echo =====================
     echo = FIO bench Summary =
     echo = ioengine=libaio     =
     echo =====================
-    echo "Random Read/Write BW (4 jobs): $EXT_WRITE_BW_AIO_VAL_04"
-    echo "Random Read/Write BW (8 jobs): $EXT_WRITE_BW_AIO_VAL_08"
-    echo "Random Read/Write BW (16 jobs): $EXT_WRITE_BW_AIO_VAL_16"
+    echo "Random Write (4 jobs): IOPS: $EXT_WRITE_IOPS_AIO_04_VAL / BW: $EXT_WRITE_BW_AIO_04_VAL"
+    echo "Random Write (8 jobs): IOPS: $EXT_WRITE_IOPS_AIO_08_VAL / BW: $EXT_WRITE_BW_AIO_08_VAL"
+    echo "Random Write (16 jobs): IOPS: $EXT_WRITE_IOPS_AIO_16_VAL / BW: $EXT_WRITE_BW_AIO_16_VAL"
 
 
     rm $FBENCH_MOUNTPOINT/fiotest
