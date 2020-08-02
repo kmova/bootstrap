@@ -1,0 +1,11 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-nvme-zpool-xfs
+parameters:
+  volblocksize: "4k"
+  compression: "off"
+  dedup: "off"
+  fstype: "xfs"
+  poolname: "zfspv-pool"
+provisioner: zfs.csi.openebs.io
