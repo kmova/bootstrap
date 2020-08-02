@@ -3,10 +3,11 @@ apiVersion: v1
 metadata:
   name: bench-pv-claim
 spec:
-  #storageClassName: openebs-hostpath-nvme-ext4
-  #storageClassName: openebs-hostpath-nvme-xfs
-  storageClassName: openebs-local-nvme-sparse
   #storageClassName: openebs-device-nvme-xfs
+  #storageClassName: openebs-hostpath-nvme-xfs
+  #storageClassName: openebs-local-nvme-sparse
+  #storageClassName: openebs-nvme-zpool-xfs
+  storageClassName: openebs-nvme-zpool-zfs
   #storageClassName: openebs-device-sparse-xfs
   accessModes:
     - ReadWriteOnce
