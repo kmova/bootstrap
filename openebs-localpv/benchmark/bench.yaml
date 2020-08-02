@@ -1,0 +1,52 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: bench-pv-claim
+spec:
+  #storageClassName: openebs-hostpath-nvme-ext4
+  #storageClassName: openebs-hostpath-nvme-xfs
+  storageClassName: openebs-local-nvme-sparse
+  #storageClassName: openebs-device-nvme-xfs
+  #storageClassName: openebs-device-sparse-xfs
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: bench
+spec:
+  template:
+    spec:
+      containers:
+      - name: bench
+        image: kiranmova/alpine-fio:latest
+        imagePullPolicy: Always
+        command:
+          - sh
+          - -c
+          - '/docker-entrypoint.sh ext-fio'
+          #- '/docker-entrypoint.sh fio'
+        env:
+          - name: FBENCH_MOUNTPOINT
+            value: /data
+          - name: FBENCH_QUICK
+            value: "yes"
+          # - name: FIO_SIZE
+          #   value: 1G
+          # - name: FIO_OFFSET_INCREMENT
+          #   value: 256M
+          # - name: FIO_DIRECT
+          #   value: "0"
+        volumeMounts:
+        - name: bench-pv
+          mountPath: /data
+      restartPolicy: Never
+      volumes:
+      - name: bench-pv
+        persistentVolumeClaim:
+          claimName: bench-pv-claim
+  backoffLimit: 4

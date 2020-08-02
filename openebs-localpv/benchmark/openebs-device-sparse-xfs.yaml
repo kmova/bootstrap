@@ -1,0 +1,23 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-device-sparse-xfs
+  annotations:
+    openebs.io/cas-type: local
+    cas.openebs.io/config: |
+      #device type will create a PV by
+      # issuing a BDC and will extract the path
+      # values from the associated BD.
+      - name: StorageType
+        value: "device"
+      - name: BlockDeviceTag
+        value: "sparse"
+      - name: BDType
+        value: "sparse"
+      - name: FSType
+        value: "xfs"
+provisioner: openebs.io/local
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Delete
+---
