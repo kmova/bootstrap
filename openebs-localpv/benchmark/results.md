@@ -51,11 +51,67 @@ Running `fio` without containers for ZFS on the same machine gave the following 
 - fio-mount-zvol: IOPS=22.6k, BW=88.4MiB/s (92.7MB/s)(26.6GiB/308400msec)
 
 
-#### Machine 6v CPU, 30GB RAM
+#### Machine 16v CPU, 30GB RAM
 
 - fio-nvme: IOPS=2627k, BW=10.0GiB/s (10.8GB/s)(3007GiB/300001msec)
 - fio-nvme-xfs: IOPS=388k, BW=1514MiB/s (1588MB/s)(444GiB/300001msec)
 - fio-ds: IOPS=74.9k, BW=293MiB/s (307MB/s)(85.7GiB/300001msec)
 - fio-raw-zvol: IOPS=97.9k, BW=382MiB/s (401MB/s)(112GiB/300041msec)
 - fio-mount-zvol: IOPS=73.9k, BW=289MiB/s (303MB/s)(84.6GiB/300069msec)
+
+#### Running dd test on 6v CPU, 30GB RAM
+
+ZFS Dataset with 4K recordsize
+```
+# date; time (dd if=/dev/zero of=/zfspv-pool/ds-4k/zeros.dat bs=4k count=10000000 && sync) ; date
+Mon Aug  3 16:40:37 UTC 2020
+10000000+0 records in
+10000000+0 records out
+40960000000 bytes (41 GB, 38 GiB) copied, 152.043 s, 269 MB/s
+real    2m33.683s
+user    0m7.113s
+sys     2m23.823s
+Mon Aug  3 16:43:11 UTC 2020
+```
+
+ZFS Dataset with 128K recordsize
+```
+# date; time (dd if=/dev/zero of=/zfspv-pool/ds/zeros.dat bs=4k count=10000000 && sync) ; date
+Mon Aug  3 16:47:49 UTC 2020
+10000000+0 records in
+10000000+0 records out
+40960000000 bytes (41 GB, 38 GiB) copied, 97.0494 s, 422 MB/s
+real    1m43.580s
+user    0m5.996s
+sys     1m26.870s
+Mon Aug  3 16:49:33 UTC 2020
+```
+
+ZVOL + XFS with 4K Block Size
+```
+# date; time (dd if=/dev/zero of=./zvol/zeros.dat bs=4k count=10000000 && sync) ; date
+Mon Aug  3 16:55:36 UTC 2020
+10000000+0 records in
+10000000+0 records out
+40960000000 bytes (41 GB, 38 GiB) copied, 117.383 s, 349 MB/s
+real    2m34.874s
+user    0m6.478s
+sys     0m36.412s
+Mon Aug  3 16:58:11 UTC 2020
+```
+
+
+ZVOL + XFS with 128K Block Size
+```
+# date; time (dd if=/dev/zero of=./zvol/zeros.dat bs=4k count=10000000 && sync) ; date
+Mon Aug  3 17:03:14 UTC 2020
+10000000+0 records in
+10000000+0 records out
+40960000000 bytes (41 GB, 38 GiB) copied, 77.893 s, 526 MB/s
+real    1m48.331s
+user    0m5.608s
+sys     0m27.155s
+Mon Aug  3 17:05:03 UTC 2020
+```
+
 
