@@ -30,14 +30,14 @@
 | Device (NVMe device + XFS)                         |  99.0k       | 391MiB/s |
 | Hostpath (NVMe device + XFS)                       | 100.0k       | 391MiB/s |
 | Hostpath Rawfile (NVME device + ext4 sparse + XFS) | 150.0k       | 585MiB/s |
-| ZPOOL ZFS (NVME device + ZFS)                      |  84.2k       | 329MiB/s |
-| ZPOOL ZVOL (NVME device + ZVOL + XFS)              |  50.9k       | 199MiB/s |
+| ZPOOL ZFS (NVME device + ZFS)                      |  50.9k       | 199MiB/s |
+| ZPOOL ZVOL (NVME device + ZVOL + XFS)              |  84.2k       | 329MiB/s |
 | **fio ioengine=libaio**                            |              |          |
 | Device (NVMe device + XFS)                         |  99.0k       | 391MiB/s |
 | Hostpath (NVMe device + XFS)                       |  99.0k       | 391MiB/s |
 | Hostpath Rawfile (NVME device + ext4 sparse + XFS) | 156.6k       | 608MiB/s |
-| ZPOOL ZFS (NVME device + ZFS)                      |  97.1k       | 379MiB/s |
-| ZPOOL ZVOL (NVME device + ZVOL + XFS)              |  56.0k       | 219MiB/s |
+| ZPOOL ZFS (NVME device + ZFS)                      |  56.0k       | 219MiB/s |
+| ZPOOL ZVOL (NVME device + ZVOL + XFS)              |  97.1k       | 379MiB/s |
 
 ### Additional Notes
 
