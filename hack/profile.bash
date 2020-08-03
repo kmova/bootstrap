@@ -37,9 +37,9 @@ else
 fi
 
 #setup go 
-if [ -d "/usr/local/go_1.13.10/" ] ; then
+if [ -d "/usr/local/go_1.14.4/" ] ; then
     export GOPATH="$HOME/go"
-    export GOROOT="/usr/local/go_1.13.10/"
+    export GOROOT="/usr/local/go_1.14.4/"
     export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
 else
     echo "go is not setup"
