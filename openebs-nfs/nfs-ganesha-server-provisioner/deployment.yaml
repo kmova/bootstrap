@@ -101,7 +101,7 @@ spec:
                 - DAC_READ_SEARCH
                 - SYS_RESOURCE
           args:
-            - "-provisioner=example.com/nfs"
+            - "-provisioner=openebs.io/nfs-ganesha"
           env:
             - name: POD_IP
               valueFrom:
@@ -120,6 +120,18 @@ spec:
       volumes:
         - name: export-volume
           persistentVolumeClaim:
-            claimName: nfs-backing-store
+            claimName: nfs-server-backing-store
           #hostPath:
           #  path: /mnt/disks/ssd0
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nfs-server-backing-store
+spec:
+  storageClassName: openebs-hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi

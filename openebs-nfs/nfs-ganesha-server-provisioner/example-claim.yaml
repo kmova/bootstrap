@@ -1,9 +1,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: nfs
+  name: example-nfs-claim
 spec:
-  storageClassName: example-nfs
+  storageClassName: openebs-nfs-ganesha
   accessModes:
     - ReadWriteMany
   resources:
