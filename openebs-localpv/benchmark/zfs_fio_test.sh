@@ -2,12 +2,14 @@
 
 set -e
 
-#This script needs two identical block devices to perform benchmarking
-# One is used to benchmark raw performance
-# Other is used to benchmark ZFS performance
+#This script needs three identical block devices to perform benchmarking
+# 1: used for raw benchmarking 
+# 2: used for formatting with xfs and benchmark it. 
+# 3: used to benchmark with ZFS
 
 RAW_DEVICE=/dev/nvme0n3
 POOL_DEVICE=/dev/nvme0n4
+XFS_MOUNT_DIR=/mnt/openebs_hostpath_xfs/fio
 
 #Install ZFSonLinux and fio tools used in this script
 #sudo apt-get install zfsutils-linux
@@ -34,6 +36,13 @@ echo -e "##################### Running the test on disk ########################
 for rw in randwrite
 do
 	sudo fio --name=fio-nvme --size=10G -group_reporting --time_based --runtime=300 --bs=4k --numjobs=16 --rw=$rw --ioengine=sync --filename=${RAW_DEVICE}
+	echo -e "--------------\n"
+done
+
+echo -e "##################### Running the test on disk with xfs #########################\n"
+for rw in randwrite
+do
+	sudo fio --name=fio-nvme-xfs --size=10G -group_reporting --time_based --runtime=300 --bs=4k --numjobs=16 --rw=$rw --ioengine=sync --filename=${XFS_MOUNT_DIR}/fio.txt
 	echo -e "--------------\n"
 done
 
@@ -68,3 +77,4 @@ sudo zfs destroy ${POOL_NAME}/raw_zvol
 
 sudo zfs destroy ${POOL_NAME}/ds
 
+zfs list
