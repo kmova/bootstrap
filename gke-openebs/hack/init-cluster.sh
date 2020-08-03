@@ -1,7 +1,8 @@
 #gcloud container get-server-config --zone us-central1-a
 #C_VERSION=" --cluster-version 1.12.5-gke.5"
 #C_VERSION=" --cluster-version 1.14.10-gke.17"
-C_VERSION=" --cluster-version 1.15.11-gke.1"
+#C_VERSION=" --cluster-version 1.15.11-gke.13"
+C_VERSION=" --cluster-version 1.16.9-gke.6"
 if [ $# -gt 0 ]; then
   C_VERSION=" --cluster-version $1"
 fi
