@@ -8,7 +8,6 @@ spec:
   #storageClassName: openebs-local-nvme-sparse
   #storageClassName: openebs-nvme-zpool-xfs
   storageClassName: openebs-nvme-zpool-zfs
-  #storageClassName: openebs-device-sparse-xfs
   accessModes:
     - ReadWriteOnce
   resources:

@@ -160,7 +160,7 @@ spec:
         - name: basepath
           mountPath: /var/openebs/ndm
         - name: sparsepath
-          mountPath: /var/openebs/sparse
+          mountPath: /mnt/openebs_hostpath_ext4/sparse
         env:
         # namespace in which NDM is installed will be passed to NDM Daemonset
         # as environment variable
@@ -176,7 +176,7 @@ spec:
         # specify the directory where the sparse files need to be created.
         # if not specified, then sparse files will not be created.
         - name: SPARSE_FILE_DIR
-          value: "/var/openebs/sparse"
+          value: "/mnt/openebs_hostpath_ext4/sparse"
         # Size(bytes) of the sparse file to be created.
         - name: SPARSE_FILE_SIZE
           value: "50737418240"
@@ -345,7 +345,7 @@ spec:
         - name: OPENEBS_IO_HELPER_IMAGE
           value: "openebs/linux-utils:1.12.0"
         - name: OPENEBS_IO_BASE_PATH
-          value: "/mnt/openebs_hostpath_ext4/local"
+          value: "/mnt/openebs_hostpath_xfs/local"
         # Process name used for matching is limited to the 15 characters
         # present in the pgrep output.
         # So fullname can't be used here with pgrep (>15 chars).A regular expression

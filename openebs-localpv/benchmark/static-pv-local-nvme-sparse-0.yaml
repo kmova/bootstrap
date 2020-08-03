@@ -17,4 +17,4 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-          - kmova-u18-n1s4-nvme
+          - kmova-nvme-u18-n1s16
