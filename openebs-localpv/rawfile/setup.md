@@ -1,7 +1,7 @@
 ## Configuration 
 
-- Edit the location where the sparse files should be created in rawfile-csi.yaml. The default is `/var/csi/rawfile`.
-  Or mount the data directory at the default location as shown below. 
+- **Important**. Setup the location where the sparse files should be created in rawfile-csi.yaml. The default is `/var/csi/rawfile`.
+  In the current version, this directory is hard-coded.  Mount your desired device to the default location as shown below. 
   ```
   sudo mkfs.xfs /dev/nvme0n3
   sudo mkdir -p /var/csi/rawfile
