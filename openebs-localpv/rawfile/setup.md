@@ -7,6 +7,14 @@
   sudo mkdir -p /var/csi/rawfile
   sudo mount /dev/nvme0n3 /var/csi/rawfile
   ```
+
+- For air-gapped environment, you will need to mirror the below images and also update the ENV variables `IMAGE_TAG` and `IMAGE_REPOSITORY`.  
+  ```
+  quay.io/k8scsi/csi-node-driver-registrar:v1.2.0
+  quay.io/k8scsi/csi-provisioner:v1.6.0
+  quay.io/k8scsi/csi-resizer:v0.5.0
+  docker.io/openebs/rawfile-localpv:ci-3e0a780
+  ```
  
 
 ## Setup
