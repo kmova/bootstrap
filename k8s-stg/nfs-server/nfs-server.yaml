@@ -12,6 +12,15 @@ spec:
       labels:
         role: nfs-server
     spec:
+      #affinity:
+      #  nodeAffinity:
+      #    requiredDuringSchedulingIgnoredDuringExecution:
+      #      nodeSelectorTerms:
+      #      - matchFields:
+      #        - key: metadata.name
+      #          operator: In
+      #          values:
+      #          - gke-kmova-helm-default-pool-53d6e58c-gjr8
       volumes:
       - name: nfs-share
         persistentVolumeClaim:

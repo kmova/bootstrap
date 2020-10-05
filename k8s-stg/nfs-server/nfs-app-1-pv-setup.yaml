@@ -1,0 +1,35 @@
+# Only create this for K8s 1.9+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-app-1-server
+provisioner: kubernetes.io/no-provisioner
+# Supported policies: Delete, Retain
+reclaimPolicy: Delete
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-app-1
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-app-1-server
+  nfs:
+    server: nfs-server.nfs-app-1.svc.cluster.local
+    path: "/"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs
+  namespace: nfs-app-1
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "nfs-app-1-server"
+  resources:
+    requests:
+      storage: 1Gi
