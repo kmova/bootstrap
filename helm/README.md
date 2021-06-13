@@ -1,3 +1,13 @@
+# Install Helm 3
+
+Ref: https://helm.sh/docs/intro/install/
+
+```
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+```
+
+# Install Helm 2.x
+
 ## Pre-requisites
 - Have minikube up and running. You can bring up [minikube in a Vagrant VM](../minikube/)
 - Ensure that socat is installed. This is used between helm to kubernetes communication. 
