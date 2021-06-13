@@ -25,9 +25,13 @@ gcloud container clusters create kmova-helm \
  ${C_VERSION}
 
 gcloud container clusters get-credentials kmova-helm \
- ${C_ZONE}
+ ${C_ZONE} \
+ --project ${PROJECT_ID}
 
+
+#gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project strong-eon-153112
 gcloud info | grep Account
+
 kubectl create clusterrolebinding kmova-helm-admin-binding \
  --clusterrole=cluster-admin \
  --user=kiran.mova@mayadata.io

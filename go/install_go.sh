@@ -2,7 +2,7 @@
 
 set -ex
 
-GO_VERSION="1.15.2"
+GO_VERSION="1.16"
 CURDIR=`pwd`
 
 # Setup go, for development
