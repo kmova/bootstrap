@@ -1,0 +1,55 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: fbench-ganesha-rwx-volume
+spec:
+  storageClassName: openebs-rwx
+  # storageClassName: ganesha-nfs
+  # storageClassName: gp2
+  # storageClassName: local-storage
+  # storageClassName: ibmc-block-bronze
+  # storageClassName: ibmc-block-silver
+  # storageClassName: ibmc-block-gold
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: fbench
+spec:
+  template:
+    spec:
+      containers:
+      - name: fbench
+        image: mittachaitu/alpine-fio:latest
+        imagePullPolicy: IfNotPresent
+        command:
+          - sh
+          - -c
+          - '/docker-entrypoint.sh fio'
+        env:
+          - name: FBENCH_MOUNTPOINT
+            value: /data
+          - name: FBENCH_QUICK
+            value: "no"
+          - name: FIO_SIZE
+            value: 50G
+          - name: FIO_DIRECT
+            value: "1"
+          - name: RUNTIME
+            value: "60"
+          - name: IODEPTH
+            value: "128"
+        volumeMounts:
+        - name: fbench-pv
+          mountPath: /data
+      restartPolicy: Never
+      volumes:
+      - name: fbench-pv
+        persistentVolumeClaim:
+          claimName: fbench-ganesha-rwx-volume
+  backoffLimit: 4
