@@ -40,7 +40,14 @@ spec:
           # - name: FIO_OFFSET_INCREMENT
           #   value: 256M
           # - name: FIO_DIRECT
-          #   value: "0"
+          #   value: "1"
+          # - name: RUNTIME
+          #   value: "60"
+          #
+          #   IODEPTH is honoured only if script is triggered
+          #   by passing avg-fio as an argument
+          # - name: IODEPTH
+          #   value: "128"
         volumeMounts:
         - name: fbench-pv
           mountPath: /data

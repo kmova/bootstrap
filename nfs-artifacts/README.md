@@ -5,9 +5,70 @@
   Test summary is calculated by taking average on particular test[r1+r2+r3)/3].
 - Inputs like iodepth, filesize, mount point, and runtime can be controlled by updating environment variables under fbench.yaml
 
-**Note**: Please update with appropriate  `StorageClassName` in fbench.yaml before deploying it.
+**Note**: Please update with appropriate  `StorageClassName` in [fbench.yaml](../fio/fbench.yaml) before deploying it.
 
-### Sample Output
+### Sample Example
+- YAML that was used to get output performace results
+
+```yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: openebs-rwx-volume
+spec:
+  storageClassName: openebs-rwx
+  # storageClassName: ganesha-nfs
+  # storageClassName: gp2
+  # storageClassName: local-storage
+  # storageClassName: ibmc-block-bronze
+  # storageClassName: ibmc-block-silver
+  # storageClassName: ibmc-block-gold
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: fbench
+spec:
+  template:
+    spec:
+      containers:
+      - name: fbench
+        image: mittachaitu/alpine-fio:latest
+        imagePullPolicy: IfNotPresent
+        command:
+          - sh
+          - -c
+          - '/docker-entrypoint.sh fio'
+        env:
+          - name: FBENCH_MOUNTPOINT
+            value: /data
+          - name: FBENCH_QUICK
+            value: "no"
+          - name: FIO_SIZE
+            value: 50G
+          - name: FIO_DIRECT
+            value: "1"
+          - name: RUNTIME
+            value: "60"
+          - name: IODEPTH
+            value: "128"
+        volumeMounts:
+        - name: fbench-pv
+          mountPath: /data
+      restartPolicy: Never
+      volumes:
+      - name: fbench-pv
+        persistentVolumeClaim:
+          claimName: openebs-rwx-volume
+  backoffLimit: 4
+```
+
+#### Sample Output
 
 - Below results are collected by deploying fbench.yaml with openebs-rwx StorageClass(Backend StorageClass is `do-block-storage` default StorageClass from DigitalOcean).
 ```sh
@@ -393,7 +454,6 @@ Run status group 0 (all jobs):
 
 
 ====================================== Testing Write Sequential Speed Completed... ================================
-All tests complete.
 
 ==================
 = FIO bench Summary =

@@ -26,7 +26,8 @@ RUN apk --no-cache add \
 	zlib-dev \
 	libaio-dev \
 	linux-headers \
-	coreutils
+	coreutils \
+    bash
 
 COPY ./docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
