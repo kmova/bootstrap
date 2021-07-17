@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: gke-ubuntu-init
+  name: gke-wipe-ssd-sdc
   labels:
-    app: gke-ubuntu-init
+    app: gke-wipe-ssd-sdc
   annotations:
-    command: &cmd umount -f /dev/sdb && umount -f /dev/sdc && wipefs -af /dev/sdb && wipefs -af /dev/sdc
+    command: &cmd umount -f /dev/sdc && wipefs -af /dev/sdc
 spec:
   selector:
     matchLabels:
-      app: gke-ubuntu-init
+      app: gke-wipe-ssd-sdc
   template:
     metadata:
       labels:
-        app: gke-ubuntu-init
+        app: gke-wipe-ssd-sdc
     spec:
       hostNetwork: true
       initContainers:
@@ -26,7 +26,7 @@ spec:
           - sh
           - -c
           - *cmd
-        image: alpine:3.7
+        image: alpine:3.12
         securityContext:
           privileged: true
       hostPID: true

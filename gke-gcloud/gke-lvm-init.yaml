@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: gke-lvm-init
+  labels:
+    app: gke-lvm-init
+  annotations:
+    command: &cmd apt-get update && apt-get install -y lvm2 && umount -f /dev/sdc && wipefs -af /dev/sdc && pvcreate /dev/sdc && vgcreate lvmvg /dev/sdc
+spec:
+  selector:
+    matchLabels:
+      app: gke-lvm-init
+  template:
+    metadata:
+      labels:
+        app: gke-lvm-init
+    spec:
+      hostNetwork: true
+      initContainers:
+      - name: init-node
+        command:
+          - nsenter
+          - --mount=/proc/1/ns/mnt
+          - --
+          - sh
+          - -c
+          - *cmd
+        image: ubuntu
+        securityContext:
+          privileged: true
+      hostPID: true
+      containers:
+      - name: wait
+        image: k8s.gcr.io/pause:3.1
+      hostPID: true
+      hostNetwork: true
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+  updateStrategy:
+    type: RollingUpdate

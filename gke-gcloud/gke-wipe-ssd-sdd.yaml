@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: gke-wipe-ssd-sdd
+  labels:
+    app: gke-wipe-ssd-sdd
+  annotations:
+    command: &cmd umount -f /dev/sdd && wipefs -af /dev/sdd
+spec:
+  selector:
+    matchLabels:
+      app: gke-wipe-ssd-sdd
+  template:
+    metadata:
+      labels:
+        app: gke-wipe-ssd-sdd
+    spec:
+      hostNetwork: true
+      initContainers:
+      - name: init-node
+        command:
+          - nsenter
+          - --mount=/proc/1/ns/mnt
+          - --
+          - sh
+          - -c
+          - *cmd
+        image: alpine:3.12
+        securityContext:
+          privileged: true
+      hostPID: true
+      containers:
+      - name: wait
+        image: k8s.gcr.io/pause:3.1
+      hostPID: true
+      hostNetwork: true
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+  updateStrategy:
+    type: RollingUpdate
