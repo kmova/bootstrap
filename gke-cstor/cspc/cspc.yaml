@@ -1,0 +1,33 @@
+apiVersion: cstor.openebs.io/v1
+kind: CStorPoolCluster
+metadata:
+ name: cstor-disk-pool
+ namespace: openebs
+spec:
+ pools:
+   - nodeSelector:
+       kubernetes.io/hostname: "gke-kmova-helm-default-pool-c2c6291d-b68p"
+     dataRaidGroups:
+       - blockDevices:
+           # /dev/sdc1   375 GiB
+           - blockDeviceName: "blockdevice-2e97d1c3e5c62f7c20b7195d2ce5711b"
+     poolConfig:
+       dataRaidGroupType: "stripe"
+ 
+   - nodeSelector:
+       kubernetes.io/hostname: "gke-kmova-helm-default-pool-c2c6291d-zbfx"
+     dataRaidGroups:
+       - blockDevices:
+           # /dev/sdc1   375 GiB
+           - blockDeviceName: "blockdevice-ea1b94df1e20c7b27c23c1bcd99ca06d"
+     poolConfig:
+       dataRaidGroupType: "stripe"
+ 
+   - nodeSelector:
+       kubernetes.io/hostname: "gke-kmova-helm-default-pool-c2c6291d-0xbq"
+     dataRaidGroups:
+       - blockDevices:
+           # /dev/sdc1   375 GiB
+           - blockDeviceName: "blockdevice-fa91beab45b42f602c91dd4c0bbb01c2"
+     poolConfig:
+       dataRaidGroupType: "stripe"
