@@ -9,4 +9,4 @@ spec:
   autoScaling: false
   target:
     replicationFactor: 1
-
+    monitor: true
