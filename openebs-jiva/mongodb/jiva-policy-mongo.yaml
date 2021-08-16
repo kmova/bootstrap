@@ -1,0 +1,12 @@
+apiVersion: openebs.io/v1alpha1
+kind: JivaVolumePolicy
+metadata:
+  name: jiva-policy-mongo
+  namespace: openebs
+spec:
+  replicaSC: openebs-hostpath
+  enableBufio: false
+  autoScaling: false
+  target:
+    replicationFactor: 1
+
