@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostpath-list
+  namespace: openebs
+spec:
+  #serviceAccountName: openebs-maya-operator
+  serviceAccountName: openebs
+  containers:
+  - name: hostpath-list-pod
+    command:
+       - sh
+       - -c
+       - 'ls /mnt/store1; sync; sleep 5; sync; tail -f /dev/null;'
+    image: busybox
+    imagePullPolicy: Always
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - mountPath: /mnt/store1
+      name: demo-vol1
+  volumes:
+  - name: demo-vol1
+    hostPath:
+      path: /var/openebs
