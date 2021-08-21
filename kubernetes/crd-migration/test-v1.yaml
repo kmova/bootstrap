@@ -11,6 +11,11 @@ spec:
   - name: v1alpha1
     served: true
     storage: true
+    additionalPrinterColumns:
+    - jsonPath: .spec.hostName
+      name: HostName
+      description: Host name where cstorpool instances scheduled
+      type: string
   # either Namespaced or Cluster
   scope: Namespaced
   names:

@@ -20,3 +20,8 @@ spec:
     # shortNames allow shorter string to match your resource on the CLI
     shortNames:
     - ttask
+  additionalPrinterColumns:
+  - JSONPath: .spec.hostName
+    name: HostName
+    description: Host name where cstorpool instances scheduled
+    type: string

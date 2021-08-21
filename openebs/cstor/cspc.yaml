@@ -6,28 +6,28 @@ metadata:
 spec:
  pools:
    - nodeSelector:
-       kubernetes.io/hostname: "gke-kmova-helm-default-pool-c2c6291d-b68p"
+       kubernetes.io/hostname: "gke-kmova-helm-default-pool-2e22e2c6-vr2j"
      dataRaidGroups:
        - blockDevices:
            # /dev/sdc1   375 GiB
-           - blockDeviceName: "blockdevice-2e97d1c3e5c62f7c20b7195d2ce5711b"
+           - blockDeviceName: "blockdevice-9de2af5f4fad35d8530691acb6f3a5a3"
      poolConfig:
        dataRaidGroupType: "stripe"
  
    - nodeSelector:
-       kubernetes.io/hostname: "gke-kmova-helm-default-pool-c2c6291d-zbfx"
+       kubernetes.io/hostname: "gke-kmova-helm-default-pool-2e22e2c6-6q81"
      dataRaidGroups:
        - blockDevices:
            # /dev/sdc1   375 GiB
-           - blockDeviceName: "blockdevice-ea1b94df1e20c7b27c23c1bcd99ca06d"
+           - blockDeviceName: "blockdevice-3a3d6cf985027842e3a452eae39748c6"
      poolConfig:
        dataRaidGroupType: "stripe"
  
    - nodeSelector:
-       kubernetes.io/hostname: "gke-kmova-helm-default-pool-c2c6291d-0xbq"
+       kubernetes.io/hostname: "gke-kmova-helm-default-pool-2e22e2c6-6gz2"
      dataRaidGroups:
        - blockDevices:
            # /dev/sdc1   375 GiB
-           - blockDeviceName: "blockdevice-fa91beab45b42f602c91dd4c0bbb01c2"
+           - blockDeviceName: "blockdevice-eace23032af7703587ec7959d4348c6a"
      poolConfig:
        dataRaidGroupType: "stripe"
