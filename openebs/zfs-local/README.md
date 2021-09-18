@@ -1,14 +1,14 @@
 - Pre-req
   - wipefs
-  - vg creation
+  - zpool creation
 
 - Install 
   ```
-  helm upgrade openebs openebs/openebs --namespace openebs --reuse-values --set lvm-localpv.enabled=true
+  helm upgrade openebs openebs/openebs --namespace openebs --reuse-values --set zfs-localpv.enabled=true
   ```
 
   ```
-  kubectl apply -f https://openebs.github.io/charts/lvm-operator.yaml
+  kubectl apply -f https://openebs.github.io/charts/zfs-operator.yaml
   ```
 - Configuration 
   - Apply SC

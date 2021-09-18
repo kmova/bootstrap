@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fio-lvm
+  name: fio-zfs
 spec:
   selector:
     matchLabels:
-      name: fio-lvm
+      name: fio-zfs
   replicas: 1
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        name: fio-lvm
+        name: fio-zfs
     spec:
       containers:
       - name: perfrunner
@@ -21,10 +21,10 @@ spec:
         args: ["-c", "while true ;do sleep 50; done"]
         volumeMounts:
            - mountPath: /datadir
-             name: fio-lvm-vol
+             name: fio-zfs-vol
         tty: true
       volumes:
-      - name: fio-lvm-vol
+      - name: fio-zfs-vol
         persistentVolumeClaim:
-          claimName: csi-lvmpv
+          claimName: csi-zfspv
 

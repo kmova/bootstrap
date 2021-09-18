@@ -1,14 +1,10 @@
 - Pre-req
   - wipefs
-  - vg creation
+  - partition 
 
 - Install 
   ```
-  helm upgrade openebs openebs/openebs --namespace openebs --reuse-values --set lvm-localpv.enabled=true
-  ```
-
-  ```
-  kubectl apply -f https://openebs.github.io/charts/lvm-operator.yaml
+  kubectl apply -f https://openebs.github.io/charts/device-operator.yaml
   ```
 - Configuration 
   - Apply SC

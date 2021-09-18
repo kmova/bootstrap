@@ -5,6 +5,10 @@
 
 - Install OpenEBS
   ```
+  helm install openebs openebs/openebs --namespace openebs --create-namespace --set legacy.enabled=false
+  ```
+
+  ```
   kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml
   ```
 
