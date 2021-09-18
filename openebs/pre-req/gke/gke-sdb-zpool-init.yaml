@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: gke-wipe-ssd-sdc
+  name: gke-sdb-zpool-init
   labels:
-    app: gke-wipe-ssd-sdc
+    app: gke-sdb-zpool-init
   annotations:
-    command: &cmd umount -f /dev/sdc && wipefs -af /dev/sdc
+    command: &cmd apt-get update && apt-get install -y zfsutils-linux && umount -f /dev/sdb && wipefs -af /dev/sdb && zpool create zfspv-pool /dev/sdb
 spec:
   selector:
     matchLabels:
-      app: gke-wipe-ssd-sdc
+      app: gke-sdb-zpool-init
   template:
     metadata:
       labels:
-        app: gke-wipe-ssd-sdc
+        app: gke-sdb-zpool-init
     spec:
       hostNetwork: true
       initContainers:
@@ -26,7 +26,7 @@ spec:
           - sh
           - -c
           - *cmd
-        image: alpine:3.12
+        image: ubuntu
         securityContext:
           privileged: true
       hostPID: true

@@ -3,6 +3,11 @@
   wget https://raw.githubusercontent.com/openebs/openebsctl/develop/scripts/install-latest.sh -O - | bash
   ```
 
+- Install OpenEBS
+  ```
+  kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml
+  ```
+
 - Install Dashboard
   ```
   helm repo add openebs-monitoring https://openebs.github.io/monitoring/

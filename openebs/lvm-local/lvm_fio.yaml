@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fio
+spec:
+  selector:
+    matchLabels:
+      name: fio
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: fio
+    spec:
+      containers:
+      - name: perfrunner
+        image: openebs/tests-fio
+        command: ["/bin/bash"]
+        args: ["-c", "while true ;do sleep 50; done"]
+        volumeMounts:
+           - mountPath: /datadir
+             name: fio-vol
+        tty: true
+      volumes:
+      - name: fio-vol
+        persistentVolumeClaim:
+          claimName: csi-lvmpv
+

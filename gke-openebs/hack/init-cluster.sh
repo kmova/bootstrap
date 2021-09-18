@@ -13,7 +13,7 @@ C_ZONE=" --zone us-central1-a"
 C_TYPE=" --image-type UBUNTU"
 C_NODES=" --num-nodes 3"
 C_MACHINE=" --machine-type n1-standard-2"
-C_LOCALSSD=" --local-ssd-count 2"
+C_LOCALSSD=" --local-ssd-count 3"
 
 
 gcloud container clusters create kmova-helm \
