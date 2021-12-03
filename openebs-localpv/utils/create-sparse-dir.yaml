@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: create-sparse-utils
+spec:
+  volumes:
+  - name: data
+    hostPath:
+      path: /mnt/disks/ssd1/
+  containers:
+  - name: hello-container
+    image: busybox
+    command:
+       - sh
+       - -c
+       - "mkdir -m 0777 -p /data/pvc-test; truncate -s 1G /data/pvc-test/disk.img"
+    volumeMounts:
+    - mountPath: /data
+      name: data

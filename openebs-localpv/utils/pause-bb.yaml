@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pause-pod
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: gke-kmova-helm-default-pool-5d947c9e-57kj
+  volumes:
+  - name: data
+    hostPath:
+      path: /mnt/disks/ssd1/
+  containers:
+  - name: busybox
+    image: openebs/linux-utils-ci:xfs-utils-1.4.0-21-ga5b5a02
+    command:
+       - sh
+       - -c
+       - "sleep infinity"
+    volumeMounts:
+    - mountPath: /data
+      name: data

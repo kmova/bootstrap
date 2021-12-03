@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: gke-ubuntu-init
+  labels:
+    app: gke-ubuntu-init
+  annotations:
+    #command: &cmd umount -f /dev/sdb && umount -f /dev/sdc && wipefs -af /dev/sdb && wipefs -af /dev/sdc
+    command: &cmd mkdir -p /var/csi/ && ln -s /mnt/disks/ssd0 /var/csi/rawfile
+spec:
+  selector:
+    matchLabels:
+      app: gke-ubuntu-init
+  template:
+    metadata:
+      labels:
+        app: gke-ubuntu-init
+    spec:
+      hostNetwork: true
+      initContainers:
+      - name: init-node
+        command:
+          - nsenter
+          - --mount=/proc/1/ns/mnt
+          - --
+          - sh
+          - -c
+          - *cmd
+        image: alpine:3.7
+        securityContext:
+          privileged: true
+      hostPID: true
+      containers:
+      - name: wait
+        image: k8s.gcr.io/pause:3.1
+      hostPID: true
+      hostNetwork: true
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+  updateStrategy:
+    type: RollingUpdate
