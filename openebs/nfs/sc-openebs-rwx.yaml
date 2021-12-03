@@ -1,0 +1,13 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-rwx
+  annotations:
+    openebs.io/cas-type: nfsrwx
+    cas.openebs.io/config: |
+      - name: NFSServerType
+        value: "kernel"
+      - name: BackendStorageClass
+        value: "openebs-hostpath"
+provisioner: openebs.io/nfsrwx
+reclaimPolicy: Delete
