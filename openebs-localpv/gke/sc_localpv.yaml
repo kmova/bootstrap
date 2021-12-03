@@ -16,3 +16,9 @@ metadata:
 provisioner: openebs.io/local
 volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Delete
+#Example for limiting the nodes where hostpath can be provisioned
+#allowedTopologies:
+#- matchLabelExpressions:
+#  - key: kubernetes.io/hostname
+#    values:
+#    - gke-kmova-helm-default-pool-5d92ea4b-p6qf

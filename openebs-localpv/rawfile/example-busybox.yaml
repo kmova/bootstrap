@@ -25,7 +25,9 @@ apiVersion: v1
 metadata:
   name: demo-vol1-claim
 spec:
-  storageClassName: openebs-rawfile
+  #storageClassName: openebs-rawfile
+  #storageClassName: openebs-rawfile-xfs
+  storageClassName: openebs-rawfile-ext4
   accessModes:
     - ReadWriteOnce
   resources:

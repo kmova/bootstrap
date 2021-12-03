@@ -1,7 +1,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: bench-pv-claim
+  name: bench-dd-pv-claim
 spec:
   #storageClassName: openebs-device-nvme-xfs
   #storageClassName: openebs-hostpath-nvme-xfs
@@ -21,19 +21,20 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: bench
+  name: bench-dd
 spec:
   template:
     spec:
       containers:
-      - name: bench
+      - name: bench-dd
         image: kiranmova/alpine-fio:latest
         imagePullPolicy: Always
         command:
           - sh
           - -c
-          - '/docker-entrypoint.sh ext-fio'
+          #- '/docker-entrypoint.sh ext-fio'
           #- '/docker-entrypoint.sh fio'
+          - "date; time dd if=/dev/zero of=/data/zeros.dat bs=4024 count=500000 && sync ; date"
         env:
           - name: FBENCH_MOUNTPOINT
             value: /data
@@ -52,5 +53,5 @@ spec:
       volumes:
       - name: bench-pv
         persistentVolumeClaim:
-          claimName: bench-pv-claim
+          claimName: bench-dd-pv-claim
   backoffLimit: 4
